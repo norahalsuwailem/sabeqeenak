@@ -95,6 +95,11 @@ T = {
     "lh1": ("Model's chance for tomorrow", "احتمال الموديل لبكرة"),
     "lh2": ("┄ most common before", "┄ الأشيع سابقاً"),
     "hist_tag": ("most common before", "الأشيع سابقاً"),
+    "mode_model": ("Model forecast", "توقع الموديل"),
+    "mode_hist": ("Most common before ({s})", "الأشيع سابقاً ({s})"),
+    "tag_likely": ("Most likely", "الأرجح"),
+    "lg_past": ("share of past alerts", "نسبة الإنذارات السابقة"),
+    "all_regions": ("All regions", "كل المناطق"),
     "past": ("past alerts: {s}", "سابقاً: {s}"),
     "slogan": ("The punishment is coming, Houthi", "العقاب قادم يا حوثي"),
     "act": ("Alert active", "الإنذار نشط"),
@@ -344,10 +349,32 @@ with tab1:
     html(f'''<div class="threat" style="--lv:{lv_color}">
   <div class="th-a"><span class="th-dot"></span><div><div class="th-k">{t("threat_k")}</div><div class="th-r">{rname(region)}</div></div></div>
   <div class="th-m">{blocks}</div>
-  <div class="th-b"><div class="th-p">{risk[region]:.0%}</div><div class="th-l">{lname(level)} · {t("threat_p")}</div></div>
+  <div class="th-b"><div class="th-p">{risk[region]:.0%}</div><div class="th-l">{lname(level)} · {t("threat_p")}</div>
+    <div class="th-l" style="color:#777984">{t("f1", n=int(x1.loc[region, "region_alerts_last_7d"]))}</div></div>
 </div>''')
-    components.html(ui.OUTLOOK.replace("__CFG__", json.dumps(out_cfg, ensure_ascii=False)).replace("__DIR__", DIR),
-                    height=580)
+    v = hot[0]
+    if best != hist and lead >= CLEAR_GAP:
+        mode, mode_txt = "model", t("mode_model")
+        why = t("beats", q=pname(hist), d=f"{lead * 100:.0f}")
+    else:
+        mode, mode_txt = "hist", t("mode_hist", s=f"{hist_share:.0%}")
+        why = t("no_beat", q=pname(best), b=f"{period_probs[best]:.0%}", d=f"{max(lead, 0) * 100:.0f}")
+    national = alerts["duration_min"].median()
+    out2_cfg = {
+        "mode": mode,
+        "verdict": {"icon": PERIOD_ICON[v], "name": pname(v), "hours": "\u2066" + PERIOD_HOURS[v] + "\u2069"},
+        "periods": [{"name": pname(p), "icon": PERIOD_ICON[p], "c": PERIOD_COLOR[p], "hours": "\u2066" + PERIOD_HOURS[p] + "\u2069",
+                     "m": float(period_probs[p]), "s": float(past_share[p]), "hot": p == v, "hist": p == hist} for p in PERIODS],
+        "clear": float(minutes) if pd.notna(minutes) else 7.0, "q25": float(q25), "q75": float(q75),
+        "clear_txt": f"{minutes:g}" if pd.notna(minutes) else "–",
+        "cmp": [{"n": rname(region), "v": float(minutes) if pd.notna(minutes) else 0, "t": f"{minutes:g} {t('min')}"},
+                {"n": t("all_regions"), "v": float(national), "t": f"{national:g} {t('min')}"}],
+        "txt": {"t1": t("h2"), "t2": t("h3"), "mode": mode_txt, "why": why, "tag": t("tag_likely"),
+                "lg1": t("lh1"), "lg2": t("lg_past"), "past": t("past", s="{s}"),
+                "cl": t("cl"), "iqr": t("iqr", a=f"{q25:g}", b=f"{q75:g}"), "ft": t("f3")},
+    }
+    components.html(ui.OUTLOOK2.replace("__CFG__", json.dumps(out2_cfg, ensure_ascii=False)).replace("__DIR__", DIR),
+                    height=470)
 
 # ---------------------------------------------------------------- tab 2: all regions
 with tab2:

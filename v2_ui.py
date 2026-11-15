@@ -478,3 +478,110 @@ function draw(){const box=document.querySelector('.mp'),W=box.clientWidth,H=box.
   tx.setAttribute('x',lx+8);tx.setAttribute('y',ly+16.5);tp.setAttribute('x',lx+w1+14);tp.setAttribute('y',ly+16.5);});}
 new ResizeObserver(draw).observe(document.querySelector('.mp'));draw();
 </script>"""
+
+# ---------------------------------------------------------------- tomorrow outlook v2: wide time-of-day card + clear-time card
+OUTLOOK2 = FONTS + """<style>""" + BASE_CSS + """
+.wrap{display:grid;grid-template-columns:1.75fr 1fr;gap:18px;direction:__DIR__}
+.card{position:relative;border-radius:14px;padding:20px 24px 16px;overflow:hidden;height:450px;
+  background:linear-gradient(165deg,#1D1F28 0%,#16171E 60%,#1E1418 100%);border:1px solid #2F313C;
+  opacity:0;transform:translateY(16px);animation:up .7s cubic-bezier(.2,.8,.3,1) forwards}
+.card:nth-child(2){animation-delay:.12s}
+@keyframes up{to{opacity:1;transform:none}}
+.card:before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;top:-150px;inset-inline-end:-120px;
+  background:radial-gradient(circle,rgba(255,45,85,.16) 0%,transparent 65%)}
+.hd{position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ht{font-size:16px;font-weight:800;color:#EBECEF}
+.chip{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;white-space:nowrap}
+.chip.model{background:rgba(255,45,85,.14);color:#FF8FA3;border:1px solid rgba(255,45,85,.45)}
+.chip.hist{background:rgba(255,255,255,.06);color:#CACCD3;border:1px dashed #6B6E7B}
+/* verdict */
+.vd{position:relative;display:flex;align-items:center;gap:14px;margin-top:12px}
+.vd .ic{font-size:40px;line-height:1;filter:drop-shadow(0 0 14px rgba(255,255,255,.25))}
+.vd .nm{font-family:'Cairo',sans-serif;font-size:38px;font-weight:900;color:#fff;line-height:1.1}
+.vd .hr{font-size:13px;color:#9FA1AC;direction:ltr;unicode-bidi:isolate;margin-top:2px}
+.why{position:relative;font-size:12.5px;color:#9FA1AC;margin-top:6px;min-height:18px}
+/* columns */
+.cols{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px;height:228px;direction:__DIR__}
+.col{position:relative;display:flex;flex-direction:column;align-items:center;border-radius:12px;padding:8px 6px 6px;border:1px solid transparent}
+.col.hot{background:rgba(255,45,85,.07);border-color:rgba(255,45,85,.55);box-shadow:0 0 30px rgba(255,45,85,.12) inset}
+.tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:800;color:#fff;background:#FF2D55;
+  padding:2px 9px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(255,45,85,.45)}
+.pc{font-size:22px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;direction:ltr;height:28px}
+.col.hot .pc{color:#FF8FA3}
+.bx{position:relative;flex:1;width:62%;display:flex;align-items:flex-end;margin-top:4px}
+.bx .bar{width:100%;height:0;border-radius:8px 8px 3px 3px;transition:height 1.2s cubic-bezier(.2,.8,.3,1);position:relative}
+.bx .bar:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 40%)}
+.bx .pm{position:absolute;left:-8px;right:-8px;height:0;border-top:2px dashed #E3E4E8;opacity:0;transition:bottom 1.2s cubic-bezier(.2,.8,.3,1),opacity .6s .8s}
+.bx .pm.on{opacity:.9}
+.lb{margin-top:8px;text-align:center;line-height:1.25}
+.lb b{display:block;font-size:13.5px;color:#EBECEF}.lb span{display:block;font-size:10.5px;color:#777984;direction:ltr}
+.lb em{display:block;font-style:normal;font-size:11px;color:#9FA1AC;margin-top:2px}
+.lb em.h{color:#fff;font-weight:700}
+.lg{position:absolute;bottom:12px;inset-inline-start:24px;inset-inline-end:24px;display:flex;gap:18px;font-size:11.5px;color:#777984}
+.lg i{display:inline-block;width:14px;height:8px;border-radius:2px;background:linear-gradient(90deg,#FF8A3D,#7B6CF6);margin-inline-end:6px}
+.lg u{display:inline-block;width:16px;border-top:2px dashed #E3E4E8;margin-inline-end:6px;vertical-align:3px;text-decoration:none}
+/* clear time */
+.cd{position:relative;width:220px;height:220px;margin:14px auto 0}
+.cd svg{position:absolute;inset:0}
+.cd .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mm{font-size:64px;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums;direction:ltr}
+.cl{font-size:14px;color:#CACCD3;margin-top:2px}
+.iqr{position:relative;margin:12px auto 0;width:fit-content;font-size:12.5px;color:#FBACB7;background:rgba(255,45,85,.08);
+  border:1px solid rgba(255,45,85,.35);border-radius:999px;padding:6px 14px;text-align:center}
+.iqr b{color:#fff;direction:ltr;unicode-bidi:isolate}
+.cmp{position:relative;display:grid;gap:8px;margin-top:16px}
+.cr{display:grid;grid-template-columns:92px 1fr 52px;gap:10px;align-items:center;font-size:12.5px;color:#CACCD3}
+.cr .tr{height:8px;border-radius:8px;background:#24262F;overflow:hidden}
+.cr .tr i{display:block;height:100%;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.3,1)}
+.cr b{color:#fff;text-align:end;font-variant-numeric:tabular-nums}
+.ft{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:11.5px;color:#777984}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}.card{height:auto;min-height:450px}}
+</style>
+<div class="wrap __DIR__">
+ <div class="card hud">
+  <div class="hd"><span class="ht" id="t1"></span><span class="chip" id="mode"></span></div>
+  <div class="vd"><span class="ic" id="vic"></span><div><div class="nm" id="vnm"></div><div class="hr" id="vhr"></div></div></div>
+  <div class="why" id="why"></div>
+  <div class="cols" id="cols"></div>
+  <div class="lg"><span><i></i><span id="lg1"></span></span><span><u></u><span id="lg2"></span></span></div>
+ </div>
+ <div class="card hud">
+  <div class="hd"><span class="ht" id="t2"></span></div>
+  <div class="cd"><svg viewBox="0 0 250 250" width="220" height="220" id="cring">
+    <defs><linearGradient id="cg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FFC233"/><stop offset="1" stop-color="#FF2D55"/></linearGradient></defs>
+    <circle cx="125" cy="125" r="96" fill="none" stroke="#24262F" stroke-width="20"/></svg>
+   <div class="in"><div class="mm" id="mm"></div><div class="cl" id="cl"></div></div></div>
+  <div class="iqr" id="iqr"></div>
+  <div class="cmp" id="cmp"></div>
+  <div class="ft" id="ft"></div>
+ </div>
+</div>
+<script>
+const C=__CFG__;const $=id=>document.getElementById(id);const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const x in a)e.setAttribute(x,a[x]);if(p)p.appendChild(e);return e;}
+const X=C.txt;$('t1').textContent=X.t1;$('t2').textContent=X.t2;$('lg1').textContent=X.lg1;$('lg2').textContent=X.lg2;
+$('mode').textContent=X.mode;$('mode').className='chip '+C.mode;
+$('vic').textContent=C.verdict.icon;$('vnm').textContent=C.verdict.name;$('vhr').textContent=C.verdict.hours;$('why').innerHTML=X.why;
+// columns in time order; height relative to the largest value shown
+const mx=Math.max(...C.periods.map(p=>Math.max(p.m,p.s)),.01);
+C.periods.forEach((p,i)=>{const d=document.createElement('div');d.className='col'+(p.hot?' hot':'');
+ d.innerHTML=`${p.hot?`<span class="tag">${X.tag}</span>`:''}<div class="pc">${Math.round(p.m*100)}%</div>
+  <div class="bx"><div class="bar" style="background:linear-gradient(180deg,${p.c},${p.c}99)"></div><div class="pm" style="bottom:0"></div></div>
+  <div class="lb"><b>${p.icon} ${p.name}</b><span>${p.hours}</span><em class="${p.hist?'h':''}">${X.past.replace('{s}',Math.round(p.s*100)+'%')}</em></div>`;
+ $('cols').appendChild(d);
+ setTimeout(()=>{d.querySelector('.bar').style.height=(p.m/mx*100)+'%';const pm=d.querySelector('.pm');pm.style.bottom=(p.s/mx*100)+'%';pm.classList.add('on');},300+i*120);});
+// clear-time ring (static)
+(function(){const g=$('cring'),c=125,R=96,scale=Math.max(30,Math.ceil((C.q75+5)/5)*5),A=m=>(m/scale*360-90)*Math.PI/180;
+ const arc=(m0,m1)=>{const a0=A(m0),a1=A(m1),big=(m1-m0)/scale>.5?1:0;return `M${c+R*Math.cos(a0)} ${c+R*Math.sin(a0)} A${R} ${R} 0 ${big} 1 ${c+R*Math.cos(a1)} ${c+R*Math.sin(a1)}`;};
+ el('path',{d:arc(C.q25,C.q75),fill:'none',stroke:'rgba(255,45,85,.28)','stroke-width':20},g);
+ el('path',{d:arc(0.01,C.clear),fill:'none',stroke:'url(#cg)','stroke-width':10,'stroke-linecap':'round'},g);
+ const a=A(C.clear);el('circle',{cx:c+R*Math.cos(a),cy:c+R*Math.sin(a),r:8,fill:'#fff',style:'filter:drop-shadow(0 0 8px #FF2D55)'},g);
+ for(let m=0;m<scale;m+=5){const t=A(m),big=m%10===0;
+  el('line',{x1:c+(R+14)*Math.cos(t),y1:c+(R+14)*Math.sin(t),x2:c+(R+(big?22:18))*Math.cos(t),y2:c+(R+(big?22:18))*Math.sin(t),stroke:'#3A3C47','stroke-width':big?2:1},g);
+  if(big){const x=el('text',{x:c+(R+33)*Math.cos(t),y:c+(R+33)*Math.sin(t)+4,'text-anchor':'middle',fill:'#777984','font-size':10},g);x.textContent=m+"'";}}
+ $('mm').textContent=C.clear_txt;$('cl').textContent=X.cl;$('iqr').innerHTML=X.iqr;$('ft').textContent=X.ft;
+ const mxc=Math.max(...C.cmp.map(r=>r.v),1);
+ C.cmp.forEach((r,i)=>{const d=document.createElement('div');d.className='cr';
+  d.innerHTML=`<span>${r.n}</span><span class="tr"><i style="background:${i?'#5A5D6B':'linear-gradient(90deg,#FFC233,#FF2D55)'}"></i></span><b>${r.t}</b>`;
+  $('cmp').appendChild(d);setTimeout(()=>d.querySelector('i').style.width=(r.v/mxc*100)+'%',400+i*120);});})();
+</script>"""
