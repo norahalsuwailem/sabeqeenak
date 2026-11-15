@@ -1,0 +1,51 @@
+{
+  "m1_features": [
+    "region_alerts_today",
+    "region_alerts_last_3d",
+    "region_alerts_last_7d",
+    "region_days_since_last",
+    "region_avg_duration_7d",
+    "tomorrow_is_weekend",
+    "Region"
+  ],
+  "m2_features": [
+    "Region",
+    "is_weekend",
+    "school_in_person",
+    "prev_period_region",
+    "region_days_since_prev",
+    "region_alerts_prev_7d"
+  ],
+  "periods": [
+    "Night",
+    "Morning",
+    "Afternoon",
+    "Evening"
+  ],
+  "regions": [
+    "Asir",
+    "Eastern Province",
+    "Jazan",
+    "Madinah",
+    "Makkah",
+    "Najran",
+    "Riyadh",
+    "Tabuk"
+  ],
+  "weekend": [
+    "Friday",
+    "Saturday"
+  ],
+  "start_date": "2026-09-01",
+  "median_clear_minutes": {
+    "Asir": 6.0,
+    "Eastern Province": 10.5,
+    "Jazan": 6.0,
+    "Madinah": 9.5,
+    "Makkah": 10.0,
+    "Najran": 5.0,
+    "Riyadh": 9.5,
+    "Tabuk": 9.0
+  },
+  "trained_until": "2026-11-10"
+}
