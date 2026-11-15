@@ -20,13 +20,13 @@ MODELS = BASE / "models"
 
 PERIOD_HOURS = {"Night": "00:00 – 05:59", "Morning": "06:00 – 11:59",
                 "Afternoon": "12:00 – 17:59", "Evening": "18:00 – 23:59"}
-PERIOD_ICON = {"Night": "🌙", "Morning": "🌅", "Afternoon": "☀️", "Evening": "🌆"}
+PERIOD_ICON = {"Night": "", "Morning": "", "Afternoon": "", "Evening": ""}   # no emojis (formal look)
 PERIOD_COLOR = {"Night": "#7B6CF6", "Morning": "#FFC233", "Afternoon": "#FF8A3D", "Evening": "#E8590C"}
 PERIOD_MID = {"Night": 3, "Morning": 9, "Afternoon": 15, "Evening": 21}
 CLEAR_GAP = 0.05          # the model's period is shown only if it leads the next one by 5+ points
 MIN_REGION_ALERTS = 10    # fewer past alerts than this -> use the most common time in all regions
 
-st.set_page_config(page_title="سابقينك", page_icon="🛡️", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="سابقينك", layout="wide", initial_sidebar_state="collapsed")
 
 # ---------------------------------------------------------------- language
 
@@ -56,10 +56,10 @@ T = {
     "live": ("LIVE · latest alerts", "مباشر · آخر الإنذارات"),
     "threat_k": ("Tomorrow's risk level", "مستوى الخطر لبكرة"),
     "threat_p": ("chance of at least one alert", "احتمال إنذار واحد على الأقل"),
-    "tab1": ("🎯  Tomorrow in my region", "🎯  بكرة في منطقتي"),
-    "tab2": ("🗺️  All regions", "🗺️  كل المناطق"),
-    "tab3": ("🛰️  Replay the alerts", "🛰️  إعادة تشغيل الإنذارات"),
-    "tab4": ("📘  How it works", "📘  كيف يشتغل"),
+    "tab1": ("Tomorrow in my region", "بكرة في منطقتي"),
+    "tab2": ("All regions", "كل المناطق"),
+    "tab3": ("Replay the alerts", "إعادة تشغيل الإنذارات"),
+    "tab4": ("How it works", "كيف يشتغل"),
     "sb_data": ("Data", "البيانات"),
     "sb_up": ("Updated tweets file (optional)", "ملف تغريدات محدّث (اختياري)"),
     "sb_up_h": ("Same columns as SaudiDCD_alerts.csv. The models stay the same; only the recent activity used as input is updated.",
@@ -102,7 +102,7 @@ T = {
     "past": ("past alerts: {s}", "سابقاً: {s}"),
     "slogan": ("The punishment is coming, Houthi", "العقاب قادم يا حوثي"),
     "act": ("Alert active", "الإنذار نشط"),
-    "ok": ("✅ Usual all-clear", "✅ وقت الزوال المعتاد"),
+    "ok": ("Usual all-clear", "وقت الزوال المعتاد"),
     "few": ("Only {n} past alert(s) in {r}, so this is the most common time in all regions ({s}).",
             "فيه {n} إنذار بس في {r}، فهذا الوقت الأشيع في كل المناطق ({s})."),
     "tie": ("Most common times in {r}'s past alerts ({a} and {b}).", "الأوقات الأشيع في إنذارات {r} السابقة ({a} و {b})."),
@@ -189,6 +189,7 @@ div[data-testid="stVerticalBlockBorderWrapper"]{{background:linear-gradient(165d
 .g-out{{font-size:1.02rem; color:#CACCD3;}} .g-out b{{color:#fff;}}
 .g-warn{{display:inline-flex; gap:8px; align-items:center; font-size:.86rem; color:#FBACB7; background:rgba(255,51,92,.08);
   border:1px solid rgba(255,51,92,.3); border-radius:999px; padding:6px 14px;}}
+.g-dot{{width:7px; height:7px; border-radius:50%; background:#FF2D55; box-shadow:0 0 8px #FF2D55; flex:none;}}
 .g-info{{direction:{DIR}; font-size:.9rem; color:#C2C8E2; background:rgba(132,142,192,.08); border:1px solid rgba(132,142,192,.3);
   border-radius:14px; padding:8px 14px; margin-top:6px;}}
 .g-card{{direction:{DIR}; background:linear-gradient(165deg,#1D1F28,#171920); border:1px solid #2F313C; border-radius:22px; padding:22px 26px; color:#CACCD3; line-height:1.75;}}
@@ -280,7 +281,7 @@ components.html(ui.HERO.replace("__CFG__", json.dumps(hero_cfg, ensure_ascii=Fal
                 .replace("__T2__", t("title2")).replace("__DEMO__", t("ph_demo")).replace("__LIVE__", t("live")), height=550)
 
 html(f'<div class="g-line"><div class="g-out">{t("outlook", t=fmt_day(tomorrow, True), d=fmt_day(today))}</div>'
-     f'<div class="g-warn">⚠️ {t("warn")}</div></div>')
+     f'<div class="g-warn"><span class="g-dot"></span>{t("warn")}</div></div>')
 
 # ---------------------------------------------------------------- predictions (same logic as app.py)
 x1 = model1_inputs(alerts, regions, today)[info["m1_features"]]
@@ -299,7 +300,7 @@ with tab1:
                                             format_func=lambda v: t("school_yes") if v else t("school_no"))
         school_value = int(school_value or 0)
     if tomorrow.day_name() in info["weekend"] and school_value == 1:
-        html(f'<div class="g-info">ℹ️ {t("weekend", d=fmt_day(tomorrow, True).split(" ")[0] if AR else tomorrow.day_name())}</div>')
+        html(f'<div class="g-info">{t("weekend", d=fmt_day(tomorrow, True).split(" ")[0] if AR else tomorrow.day_name())}</div>')
 
     x2 = model2_inputs(alerts, [region], today, {region: school_value})[info["m2_features"]]
     period_probs = pd.Series(model2.predict_proba(x2)[0], index=model2.classes_).reindex(PERIODS)
@@ -411,26 +412,26 @@ with tab3:
 with tab4:
     if AR:
         body = f"""
-<div class="sec"><h4>🎯 خطر الغد</h4>موديل <b>Random Forest</b> متدرب على النشاط الأخير لكل منطقة (إنذارات اليوم، وآخر 3 و 7 أيام،
+<div class="sec"><h4>خطر الغد</h4>موديل <b>Random Forest</b> متدرب على النشاط الأخير لكل منطقة (إنذارات اليوم، وآخر 3 و 7 أيام،
 والأيام من آخر إنذار، ومتوسط مدة الإنذار) وهل بكرة إجازة نهاية أسبوع. في أسابيع الاختبار لقط <b>78%</b> من أيام الهجمات،
 تقريباً ضعف القاعدة البسيطة "هجوم اليوم ← هجوم بكرة".<br><b>المستويات:</b> مرتفع ≥ 50% (إنذار الموديل)، متوسط 35–49%، منخفض أقل من 35%.</div>
-<div class="sec"><h4>🕐 الوقت الأرجح</h4>موديل <b>Logistic Regression</b> يستخدم المنطقة، والإجازة، وإجابة الدراسة الحضورية، وفترة آخر إنذار في المنطقة
+<div class="sec"><h4>الوقت الأرجح</h4>موديل <b>Logistic Regression</b> يستخدم المنطقة، والإجازة، وإجابة الدراسة الحضورية، وفترة آخر إنذار في المنطقة
 ونشاطها الأخير. هو <b>تلميح مو تأكيد</b>: أصاب 41% في أسابيع الاختبار (4 فترات)، وأغلب قوته من معلومة الدراسة.
 نبدأ من <b>الوقت الأشيع</b> في إنذارات المنطقة السابقة (الإطار المنقّط)، والعقرب ما يتحرك لفترة ثانية إلا إذا الموديل أعطاها احتمال أعلى منه بـ <b>5 نقاط أو أكثر</b>. مثال: في الرياض مع الدراسة الحضورية، الموديل يعطي الصباح 32% مقابل الليل 22%، فيروح العقرب للصباح.</div>
-<div class="sec"><h4>⏱️ مدة الزوال</h4>وسيط مدة الإنذارات السابقة في المنطقة (إحصاء، بدون موديل).</div>
-<div class="sec"><h4>⚠️ القيود</h4>تقريباً 71 يوم بيانات، وتنبيهات زايدة كثيرة، والأنماط تتغير مع الوقت.
+<div class="sec"><h4>مدة الزوال</h4>وسيط مدة الإنذارات السابقة في المنطقة (إحصاء، بدون موديل).</div>
+<div class="sec"><h4>القيود</h4>تقريباً 71 يوم بيانات، وتنبيهات زايدة كثيرة، والأنماط تتغير مع الوقت.
 الموديلات متدربة على بيانات لين {info['trained_until']}، ورفع ملف تغريدات أحدث يحدّث المدخلات بس، مو الموديلات.</div>"""
     else:
         body = f"""
-<div class="sec"><h4>🎯 Tomorrow's risk</h4><b>Random Forest</b> trained on each region's recent activity (alerts today, in the last 3 and 7 days,
+<div class="sec"><h4>Tomorrow's risk</h4><b>Random Forest</b> trained on each region's recent activity (alerts today, in the last 3 and 7 days,
 days since the last alert, average alert duration) and whether tomorrow is a weekend. On the test weeks it caught <b>78%</b>
 of attack days, about twice a simple "attack today → attack tomorrow" rule.<br><b>Levels:</b> High ≥ 50% (the model's alarm), Medium 35–49%, Low below 35%.</div>
-<div class="sec"><h4>🕐 Most likely time</h4><b>Logistic Regression</b> using the region, weekend, the school answer you give, the period of the
+<div class="sec"><h4>Most likely time</h4><b>Logistic Regression</b> using the region, weekend, the school answer you give, the period of the
 region's previous alert and its recent activity. It is a <b>hint, not a certainty</b>: it was right 41% of the time on the test weeks
 (4 periods), and most of its skill comes from the school information. We start from the region's <b>most common time in past alerts</b> (dashed outline); the hand moves to another period
 only if the model rates it at least <b>5 points</b> higher.</div>
-<div class="sec"><h4>⏱️ Time until danger clears</h4>Median duration of past alerts in the region (statistics, no model).</div>
-<div class="sec"><h4>⚠️ Limits</h4>About 71 days of data; many false alarms; patterns shift over time. The models were trained on data
+<div class="sec"><h4>Time until danger clears</h4>Median duration of past alerts in the region (statistics, no model).</div>
+<div class="sec"><h4>Limits</h4>About 71 days of data; many false alarms; patterns shift over time. The models were trained on data
 until {info['trained_until']}; uploading a newer tweets file updates the inputs, not the models.</div>"""
     html(f'<div class="g-card">{body}</div>')
 

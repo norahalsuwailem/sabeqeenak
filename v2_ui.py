@@ -44,7 +44,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%}
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .tt{position:absolute;top:0;height:100%;display:flex;align-items:center;white-space:nowrap;animation:mq 60s linear infinite}
 .tt span{display:inline-flex;gap:8px;align-items:center;padding:0 22px;font-size:13.5px;color:#E3E4E8;direction:__DIR__;border-inline-end:1px solid rgba(255,255,255,.12)}
-.tt span b{color:#fff;font-weight:700}.tt span em{font-style:normal;color:#FF8FA3}.tt span em.n{direction:ltr;font-variant-numeric:tabular-nums}
+.tt span b{color:#fff;font-weight:700}.tt span i.d{width:7px;height:7px;border-radius:50%;background:#FF2D55;box-shadow:0 0 8px #FF2D55}.tt span em{font-style:normal;color:#FF8FA3}.tt span em.n{direction:ltr;font-variant-numeric:tabular-nums}
 @keyframes mq{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 14px;border-radius:999px;background:rgba(232,12,56,.12);
   border:1px solid rgba(232,12,56,.45);color:#F88493;font-size:13px;font-weight:600}
@@ -118,7 +118,7 @@ h1{font-size:104px;line-height:1.05;margin:8px 0 0;font-weight:900;letter-spacin
 <script>
 const C=__CFG__;
 // live ticker of the latest alerts (content duplicated for a seamless loop)
-(function(){const h=C.ticker.map(x=>`<span>🔴 <b>${x.r}</b> <em>${x.d}</em><em class="n">${x.t}</em> · ${x.m}</span>`).join('');
+(function(){const h=C.ticker.map(x=>`<span><i class="d"></i><b>${x.r}</b> <em>${x.d}</em><em class="n">${x.t}</em> · ${x.m}</span>`).join('');
  document.getElementById('tt').innerHTML=h+h;})();
 // starfield
 const cv=document.getElementById('cv'),cx=cv.getContext('2d');let W,H,stars=[];
@@ -150,13 +150,13 @@ tick();setInterval(tick,10000);
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function phoneLoop(){let k=0;await wait(1200);while(true){const R=C.regions[k%C.regions.length];k++;
  nt.className='nt';np.style.transition='none';np.style.width='0';
- nh.textContent='⚠️ '+C.ph_h;nb.textContent=C.ph_b.replace('{r}',R.n);ne.textContent=C.ph_eta.replace('{m}',R.m);
+ nh.textContent=C.ph_h;nb.textContent=C.ph_b.replace('{r}',R.n);ne.textContent=C.ph_eta.replace('{m}',R.m);
  ph.classList.remove('okay');void ph.offsetWidth;ph.classList.add('alert','buzz');
  rg.classList.remove('go');void rg.offsetWidth;rg.classList.add('go');
  await wait(250);nt.classList.add('show');await wait(400);
  np.style.transition='width 3.6s linear';np.style.width='100%';await wait(3900);
  ph.classList.remove('alert','buzz');nt.classList.remove('show');await wait(450);
- nt.classList.add('ok');nh.textContent='✅ '+C.ph_ok_h;nb.textContent=C.ph_ok_b.replace('{r}',R.n);ne.textContent='';np.style.transition='none';np.style.width='0';
+ nt.classList.add('ok');nh.textContent=C.ph_ok_h;nb.textContent=C.ph_ok_b.replace('{r}',R.n);ne.textContent='';np.style.transition='none';np.style.width='0';
  ph.classList.add('okay');nt.classList.add('show');await wait(2600);
  nt.classList.remove('show');ph.classList.remove('okay');await wait(1400);}}
 phoneLoop();
@@ -259,7 +259,7 @@ function logLine(e){const t=stamp(e[0]);const d=document.createElement('div');d.
 function hud(){const t=stamp(cur),day=Math.min(DAYS,Math.floor(cur/1440)+1);
  $('d').textContent=t.toLocaleDateString(C.loc,{day:'numeric',month:'long',year:'numeric'});
  $('tm').textContent=fmtT(t);const h=t.getHours(),night=h>=22||h<6;$('sky').style.opacity=night?0:1;
- $('dn').textContent=(night?'🌙 ':'☀️ ')+C.day.replace('{d}',day).replace('{n}',DAYS);
+ $('dn').textContent=C.day.replace('{d}',day).replace('{n}',DAYS);
  $('cnt').textContent=idx;$('ph').style.left=(Math.min(1,cur/END)*100)+'%';
  bars.forEach((b,i)=>b.classList.toggle('p',i<day));}
 function seek(m){cur=m;idx=0;counts=RG.map(()=>0);$('log').innerHTML='';
@@ -497,13 +497,14 @@ OUTLOOK3 = FONTS + """<style>""" + BASE_CSS + """
 .big small{font-size:22px;font-weight:800;margin-inline-start:2px;color:#FF8FA3}
 .unit{font-size:13px;color:#9FA1AC;margin-top:4px}
 .pn{font-family:'Cairo',sans-serif;font-size:30px;font-weight:900;color:#fff;line-height:1.1}
-.pi{font-size:30px;line-height:1;margin-bottom:2px}
+.pi{font-size:30px;line-height:1;margin-bottom:2px}.pi:empty{display:none}
+.ctr .tg{font-size:11px;color:#9FA1AC;letter-spacing:.3px;margin-bottom:4px}
 .ph{font-size:11.5px;color:#9FA1AC;margin-top:3px}
 .pill{margin-top:8px;padding:5px 14px;border-radius:999px;font-size:13px;font-weight:800}
 .sub{margin-top:auto;align-self:stretch;text-align:center;font-size:12.5px;color:#9FA1AC;line-height:1.5}
 .sub b{color:#fff}
-.chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px}
-.chips span{font-size:12px;padding:4px 9px;border-radius:8px;background:#22242D;color:#CACCD3;border:1px solid #2F313C;direction:__DIR__}
+.chips{display:flex;gap:5px;justify-content:center;flex-wrap:nowrap;margin-top:14px}
+.chips span{font-size:11px;padding:3px 7px;white-space:nowrap;border-radius:8px;background:#22242D;color:#CACCD3;border:1px solid #2F313C;direction:__DIR__}
 .chips span b{color:#fff;direction:ltr;unicode-bidi:isolate}
 .chips span.hot{background:rgba(255,45,85,.14);border-color:rgba(255,45,85,.55);color:#FF8FA3}
 .chips span.hist{border-style:dashed;border-color:#8F919C}
@@ -568,7 +569,7 @@ function count(node,to,dec,suffix,delay){const t0=performance.now()+delay;(funct
  el('path',{d:`M${c-7} ${c-66} L${c} ${c-90} L${c+7} ${c-66} Z`,fill:'#FF2D55',style:'filter:drop-shadow(0 0 8px #FF2D55)'},hand);
  setTimeout(()=>hand.style.transform=`rotate(${C.hand_h/24*360}deg)`,450);
  $('pi').textContent=C.verdict.icon;$('pn').textContent=C.verdict.name;$('ph').textContent=C.verdict.hours;
- $('chips').innerHTML=C.periods.map(p=>`<span class="${p.hot?'hot':''} ${p.hist?'hist':''}">${p.icon} <b>${Math.round(p.m*100)}%</b></span>`).join('');})();
+ $('chips').innerHTML=C.periods.map(p=>`<span class="${p.hot?'hot':''} ${p.hist?'hist':''}">${p.name} <b>${Math.round(p.m*100)}%</b></span>`).join('');})();
 // ---- 3. clear time: same arc style, scale 0..max
 (function(){const g=$('g3');defs(g,'gc',[[0,'#FFC233'],[1,'#FF2D55']]);const scale=C.scale;
  ticks(g,scale/5*2,[0,scale/4,scale/2,scale*3/4,scale].map(v=>v+"'"));track(g);
