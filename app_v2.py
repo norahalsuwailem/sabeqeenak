@@ -434,10 +434,3 @@ only if the model rates it at least <b>5 points</b> higher.</div>
 <div class="sec"><h4>Limits</h4>About 71 days of data; many false alarms; patterns shift over time. The models were trained on data
 until {info['trained_until']}; uploading a newer tweets file updates the inputs, not the models.</div>"""
     html(f'<div class="g-card">{body}</div>')
-
-# ---------------------------------------------------------------- footer
-html(f'''<div style="direction:{DIR}; display:flex; align-items:center; gap:18px; margin:40px 0 12px;">
-  <span style="flex:1; height:1px; background:linear-gradient(90deg,transparent,#FF2D55);"></span>
-  <span style="font-family:'Cairo',sans-serif; font-size:1.35rem; font-weight:900; color:#FF2D55; letter-spacing:.5px;
-    text-shadow:0 0 18px rgba(255,45,85,.55);">{t("slogan")}</span>
-  <span style="flex:1; height:1px; background:linear-gradient(90deg,#FF2D55,transparent);"></span></div>''')

@@ -1,7 +1,7 @@
 """v2_ui.py - HTML/JS templates for the animated app_v2.py (no external JS libraries)."""
 
 FONTS = ('<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900'
-         '&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">')
+         '&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Cairo:wght@600;700;800;900&family=Noto+Kufi+Arabic:wght@700;800;900&display=swap" rel="stylesheet">')
 BASE_CSS = """
 *{box-sizing:border-box} html,body{margin:0;background:transparent;color:#EBECEF;
   font-family:Inter,'IBM Plex Sans Arabic',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -50,7 +50,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%}
   border:1px solid rgba(232,12,56,.45);color:#F88493;font-size:13px;font-weight:600}
 .badge i{width:8px;height:8px;border-radius:50%;background:#FF2D55;animation:pulse 1.6s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,26,72,.7)}70%{box-shadow:0 0 0 10px rgba(255,26,72,0)}100%{box-shadow:0 0 0 0 rgba(255,26,72,0)}}
-h1{font-size:104px;line-height:1.05;margin:8px 0 0;font-weight:900;letter-spacing:0;filter:drop-shadow(0 0 28px rgba(255,45,85,.35));
+h1{font-family:'Noto Kufi Arabic','Cairo',sans-serif !important;font-size:86px;line-height:1.45;margin:0;padding:0 .08em .12em;font-weight:900;letter-spacing:0;filter:drop-shadow(0 0 28px rgba(255,45,85,.35));
   background:linear-gradient(90deg,#fff 0%,#FBB2BC 35%,#FF335C 60%,#fff 100%);background-size:200% auto;
   -webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
 @keyframes shine{to{background-position:200% center}}
