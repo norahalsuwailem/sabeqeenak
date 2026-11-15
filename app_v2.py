@@ -3,6 +3,7 @@
 Run:  streamlit run app_v2.py
 """
 import json
+import math
 from pathlib import Path
 
 import joblib
@@ -95,6 +96,9 @@ T = {
     "lh1": ("Model's chance for tomorrow", "احتمال الموديل لبكرة"),
     "lh2": ("┄ most common before", "┄ الأشيع سابقاً"),
     "hist_tag": ("most common before", "الأشيع سابقاً"),
+    "mode_model": ("Model forecast", "توقع الموديل"),
+    "mode_hist": ("Most common before ({s})", "الأشيع سابقاً ({s})"),
+    "all_regions": ("All regions", "كل المناطق"),
     "past": ("past alerts: {s}", "سابقاً: {s}"),
     "slogan": ("The punishment is coming, Houthi", "العقاب قادم يا حوثي"),
     "act": ("Alert active", "الإنذار نشط"),
@@ -346,8 +350,30 @@ with tab1:
   <div class="th-m">{blocks}</div>
   <div class="th-b"><div class="th-p">{risk[region]:.0%}</div><div class="th-l">{lname(level)} · {t("threat_p")}</div></div>
 </div>''')
-    components.html(ui.OUTLOOK.replace("__CFG__", json.dumps(out_cfg, ensure_ascii=False)).replace("__DIR__", DIR),
-                    height=580)
+    v = hot[0]
+    if best != hist and lead >= CLEAR_GAP:
+        why = f"<b>{t('mode_model')}</b> · " + t("beats", q=pname(hist), d=f"{lead * 100:.0f}")
+    else:
+        why = f"<b>{t('mode_hist', s=f'{hist_share:.0%}')}</b> · " + t("no_beat", q=pname(best), b=f"{period_probs[best]:.0%}",
+                                                                   d=f"{max(lead, 0) * 100:.0f}")
+    national = alerts["duration_min"].median()
+    m_txt = f"{minutes:g}" if pd.notna(minutes) else "–"
+    out3_cfg = {
+        "p": float(risk[region]), "level": level, "level_txt": lname(level), "th_med": 0.35, "th_high": 0.50,
+        "periods": [{"name": pname(p), "icon": PERIOD_ICON[p], "c": PERIOD_COLOR[p], "m": float(period_probs[p]),
+                     "hot": p == v, "hist": p == hist} for p in PERIODS],
+        "hand_h": PERIOD_MID[v],
+        "verdict": {"icon": PERIOD_ICON[v], "name": pname(v), "hours": "\u2066" + PERIOD_HOURS[v] + "\u2069"},
+        "clear": float(minutes) if pd.notna(minutes) else 7.0, "q25": float(q25), "q75": float(q75),
+        "scale": max(20, int(math.ceil((float(q75) + 5) / 10.0) * 10)),
+        "txt": {"h1": t("h1"), "h2": t("h2"), "h3": t("h3"), "u3": t("cl"),
+                "s1": t("s1", r=rname(region)) + "<br>" + t("f1", n=int(x1.loc[region, "region_alerts_last_7d"])),
+                "s2": why,
+                "s3": t("iqr", a=f"{q25:g}", b=f"{q75:g}") + "<br>" + f"{rname(region)} <b>{m_txt}</b> {t('min')} · "
+                      + f"{t('all_regions')} <b>{national:g}</b> {t('min')}"},
+    }
+    components.html(ui.OUTLOOK3.replace("__CFG__", json.dumps(out3_cfg, ensure_ascii=False)).replace("__DIR__", DIR),
+                    height=520)
 
 # ---------------------------------------------------------------- tab 2: all regions
 with tab2:
