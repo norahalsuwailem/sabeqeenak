@@ -25,7 +25,7 @@ PERIOD_MID = {"Night": 3, "Morning": 9, "Afternoon": 15, "Evening": 21}
 CLEAR_GAP = 0.05          # the model's period is shown only if it leads the next one by 5+ points
 MIN_REGION_ALERTS = 10    # fewer past alerts than this -> use the most common time in all regions
 
-st.set_page_config(page_title="سابقينك", page_icon="🛡️", layout="wide")
+st.set_page_config(page_title="سابقينك", page_icon="🛡️", layout="wide", initial_sidebar_state="collapsed")
 
 # ---------------------------------------------------------------- language
 
@@ -52,6 +52,9 @@ T = {
     "ph_ok_h": ("All clear", "زال الخطر"),
     "ph_ok_b": ("{r}: the alert is over.", "{r}: انتهى الإنذار."),
     "ph_demo": ("Simulation · not a real alert", "محاكاة · ليس إنذاراً حقيقياً"),
+    "live": ("LIVE · latest alerts", "مباشر · آخر الإنذارات"),
+    "threat_k": ("Tomorrow's risk level", "مستوى الخطر لبكرة"),
+    "threat_p": ("chance of at least one alert", "احتمال إنذار واحد على الأقل"),
     "tab1": ("🎯  Tomorrow in my region", "🎯  بكرة في منطقتي"),
     "tab2": ("🗺️  All regions", "🗺️  كل المناطق"),
     "tab3": ("🛰️  Replay the alerts", "🛰️  إعادة تشغيل الإنذارات"),
@@ -154,39 +157,72 @@ def fmt_day(d, weekday=False):
 html(f"""<style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
 html, body, .stMarkdown, button, input, label, p, span, div {{font-family:'Inter','IBM Plex Sans Arabic',system-ui,sans-serif;}}
-.stApp{{background:radial-gradient(1100px 600px at 85% -10%, rgba(232,89,12,.10), transparent 60%),
-  radial-gradient(900px 600px at -10% 20%, rgba(90,70,220,.10), transparent 60%), #070B16 !important; color:#E8EBF2;}}
+.stApp{{background:radial-gradient(1100px 600px at 85% -10%, rgba(232,12,56,.10), transparent 60%),
+  radial-gradient(900px 600px at -10% 20%, rgba(220,70,145,.10), transparent 60%), #0C0D11 !important; color:#EBECEF;}}
 header[data-testid="stHeader"]{{background:transparent;}}
 .block-container{{padding-top:3rem !important; max-width:1260px;}}
 iframe{{border-radius:24px;}}
 .main .block-container, [data-testid="stMainBlockContainer"]{{direction:{DIR};}}
-[data-testid="stWidgetLabel"] p, label p{{color:#E8EBF2 !important; font-weight:600;}}
-.stSelectbox [role="group"], .stSelectbox div[data-baseweb="select"] > div{{background:#0F1627 !important; border-color:#253049 !important;}}
-.stSelectbox input{{color:#E8EBF2 !important;}}
-[role="listbox"], [role="listbox"] [role="option"]{{background:#131B2E !important; color:#E8EBF2 !important;}}
-[role="listbox"] [role="option"]:hover, [role="listbox"] [role="option"][data-focused]{{background:#1E2840 !important;}}
-[data-testid="stButtonGroup"] button{{background:#131B2E !important; color:#E8EBF2 !important; border-color:#253049 !important;}}
-[data-testid="stButtonGroup"] button[kind$="Active"], [data-testid="stButtonGroup"] button[aria-checked="true"]{{background:rgba(232,89,12,.18) !important; color:#FFB37D !important; border-color:#E8590C !important;}}
-.stTabs [data-baseweb="tab-list"]{{gap:6px; border-bottom:1px solid #1E2944;}}
+[data-testid="stWidgetLabel"] p, label p{{color:#EBECEF !important; font-weight:600;}}
+.stSelectbox [role="group"], .stSelectbox div[data-baseweb="select"] > div{{background:#17181F !important; border-color:#31333D !important;}}
+.stSelectbox input{{color:#EBECEF !important;}}
+[role="listbox"], [role="listbox"] [role="option"]{{background:#1C1D25 !important; color:#EBECEF !important;}}
+[role="listbox"] [role="option"]:hover, [role="listbox"] [role="option"][data-focused]{{background:#292B35 !important;}}
+[data-testid="stButtonGroup"] button{{background:#1C1D25 !important; color:#EBECEF !important; border-color:#31333D !important;}}
+[data-testid="stButtonGroup"] button[kind$="Active"], [data-testid="stButtonGroup"] button[aria-checked="true"]{{background:rgba(232,12,56,.18) !important; color:#F88493 !important; border-color:#E80C38 !important;}}
+.stTabs [data-baseweb="tab-list"]{{gap:6px; border-bottom:1px solid #2A2D38;}}
 .stTabs [role="tab"]{{padding:10px 16px; border-radius:12px 12px 0 0;}}
-.stTabs [role="tab"] p{{color:#93A0B8 !important; font-size:1.02rem; font-weight:600;}}
-.stTabs [role="tab"][aria-selected="true"] p{{color:#FFB37D !important;}}
-.stTabs [data-baseweb="tab-highlight"]{{background:#E8590C !important;}}
-section[data-testid="stSidebar"]{{background:#0B1120 !important; border-inline-end:1px solid #1E2944;}}
-section[data-testid="stSidebar"] *{{color:#E8EBF2;}}
-[data-testid="stFileUploaderDropzone"]{{background:#0F1627 !important; border:1px dashed #2B3754 !important;}}
-[data-testid="stFileUploaderDropzone"] button{{background:#131B2E !important; color:#E8EBF2 !important; border:1px solid #2B3754 !important;}}
-[data-testid="stDateInput"] *{{background-color:#0F1627 !important; color:#E8EBF2 !important; border-color:#253049 !important;}}
-div[data-testid="stVerticalBlockBorderWrapper"]{{background:linear-gradient(165deg,#141C31,#0F1628) !important; border-color:#232E48 !important; border-radius:22px !important;}}
+.stTabs [role="tab"] p{{color:#9FA1AC !important; font-size:1.02rem; font-weight:600;}}
+.stTabs [role="tab"][aria-selected="true"] p{{color:#F88493 !important;}}
+.stTabs [data-baseweb="tab-highlight"]{{background:#E80C38 !important;}}
+section[data-testid="stSidebar"]{{background:#121319 !important; border-inline-end:1px solid #2A2D38;}}
+section[data-testid="stSidebar"] *{{color:#EBECEF;}}
+[data-testid="stFileUploaderDropzone"]{{background:#17181F !important; border:1px dashed #383B47 !important;}}
+[data-testid="stFileUploaderDropzone"] button{{background:#1C1D25 !important; color:#EBECEF !important; border:1px solid #383B47 !important;}}
+[data-testid="stDateInput"] *{{background-color:#17181F !important; color:#EBECEF !important; border-color:#31333D !important;}}
+div[data-testid="stVerticalBlockBorderWrapper"]{{background:linear-gradient(165deg,#1D1F28,#171920) !important; border-color:#2F313C !important; border-radius:22px !important;}}
 .g-line{{direction:{DIR}; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin:6px 0 12px;}}
-.g-out{{font-size:1.02rem; color:#C3CADA;}} .g-out b{{color:#fff;}}
-.g-warn{{display:inline-flex; gap:8px; align-items:center; font-size:.86rem; color:#FFD8A8; background:rgba(255,194,51,.08);
-  border:1px solid rgba(255,194,51,.3); border-radius:999px; padding:6px 14px;}}
-.g-info{{direction:{DIR}; font-size:.9rem; color:#A5D8FF; background:rgba(77,171,247,.08); border:1px solid rgba(77,171,247,.3);
+.g-out{{font-size:1.02rem; color:#CACCD3;}} .g-out b{{color:#fff;}}
+.g-warn{{display:inline-flex; gap:8px; align-items:center; font-size:.86rem; color:#FBACB7; background:rgba(255,51,92,.08);
+  border:1px solid rgba(255,51,92,.3); border-radius:999px; padding:6px 14px;}}
+.g-info{{direction:{DIR}; font-size:.9rem; color:#C2C8E2; background:rgba(132,142,192,.08); border:1px solid rgba(132,142,192,.3);
   border-radius:14px; padding:8px 14px; margin-top:6px;}}
-.g-card{{direction:{DIR}; background:linear-gradient(165deg,#141C31,#0F1628); border:1px solid #232E48; border-radius:22px; padding:22px 26px; color:#C3CADA; line-height:1.75;}}
-.g-card h4{{color:#fff; margin:0 0 6px; font-size:1.05rem;}} .g-card b{{color:#FFB37D;}}
-.g-card .sec{{padding:12px 0; border-bottom:1px solid #1E2944;}} .g-card .sec:last-child{{border-bottom:none;}}
+.g-card{{direction:{DIR}; background:linear-gradient(165deg,#1D1F28,#171920); border:1px solid #2F313C; border-radius:22px; padding:22px 26px; color:#CACCD3; line-height:1.75;}}
+.g-card h4{{color:#fff; margin:0 0 6px; font-size:1.05rem;}} .g-card b{{color:#F88493;}}
+.g-card .sec{{padding:12px 0; border-bottom:1px solid #2A2D38;}} .g-card .sec:last-child{{border-bottom:none;}}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap');
+.stApp:before{{content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 4px),
+             radial-gradient(1200px 700px at 50% -20%, rgba(255,45,85,.10), transparent 60%);}}
+/* tabs -> centered pill navigation */
+.stTabs [data-baseweb="tab-list"], .stTabs [role="tablist"]{{gap:4px; border:1px solid #2A2D38 !important; background:#121319; border-radius:14px; padding:6px;
+  width:fit-content; margin:8px auto 18px; box-shadow:0 10px 30px rgba(0,0,0,.35);}}
+.stTabs [role="tablist"] > div:not([role="tab"]){{display:none !important;}}
+.stTabs [data-baseweb="tab-border"], .stTabs [data-baseweb="tab-highlight"]{{display:none !important;}}
+.stTabs [role="tab"]{{padding:8px 18px !important; border-radius:10px !important; transition:all .25s;}}
+.stTabs [role="tab"] p{{font-family:'Cairo','IBM Plex Sans Arabic',sans-serif !important; font-size:1.02rem !important; font-weight:700 !important;}}
+.stTabs [role="tab"][aria-selected="true"]{{background:linear-gradient(180deg,#FF2D55,#C9123A); box-shadow:0 6px 22px rgba(255,45,85,.35);}}
+.stTabs [role="tab"][aria-selected="true"] p{{color:#fff !important;}}
+.stTabs [role="tab"]:hover p{{color:#fff !important;}}
+/* region pills */
+[data-testid="stButtonGroup"] button{{border-radius:10px !important; padding:6px 14px !important; font-weight:600 !important;}}
+[data-testid="stWidgetLabel"] p{{font-family:'Cairo','IBM Plex Sans Arabic',sans-serif !important; font-size:1rem !important; color:#FF8FA3 !important; letter-spacing:.2px;}}
+/* threat banner */
+.threat{{direction:{DIR}; position:relative; display:grid; grid-template-columns:auto 1fr auto; gap:26px; align-items:center;
+  margin:10px 0 18px; padding:16px 24px; border-radius:14px; overflow:hidden;
+  background:linear-gradient(90deg, color-mix(in srgb, var(--lv) 16%, #15161C), #15161C 60%); border:1px solid color-mix(in srgb, var(--lv) 45%, #2A2D38);}}
+.threat:before{{content:""; position:absolute; inset-block:0; inset-inline-start:0; width:4px; background:var(--lv); box-shadow:0 0 18px var(--lv);}}
+.th-a{{display:flex; gap:14px; align-items:center;}}
+.th-dot{{width:14px; height:14px; border-radius:50%; background:var(--lv); box-shadow:0 0 0 0 var(--lv); animation:thp 1.4s infinite;}}
+@keyframes thp{{0%{{box-shadow:0 0 0 0 color-mix(in srgb, var(--lv) 70%, transparent)}}70%{{box-shadow:0 0 0 14px transparent}}100%{{box-shadow:0 0 0 0 transparent}}}}
+.th-k{{font-size:.82rem; color:#9FA1AC;}} .th-r{{font-family:'Cairo',sans-serif; font-size:1.7rem; font-weight:900; color:#fff; line-height:1.15;}}
+.th-m{{display:flex; gap:5px; align-items:flex-end; height:34px; direction:{DIR};}}
+.th-m i{{flex:1; height:100%; border-radius:3px; background:#24262F; transform-origin:bottom;}}
+.th-m i.on{{background:var(--lv); box-shadow:0 0 10px color-mix(in srgb, var(--lv) 60%, transparent); animation:blk .5s ease-out both;}}
+@keyframes blk{{from{{transform:scaleY(.2); opacity:.2}}to{{transform:none; opacity:1}}}}
+.th-b{{text-align:end;}} .th-p{{font-family:Inter,sans-serif; font-size:2.6rem; font-weight:900; color:var(--lv); line-height:1; direction:ltr;}}
+.th-l{{font-size:.82rem; color:#CACCD3; margin-top:4px;}}
+@media (max-width:820px){{.threat{{grid-template-columns:1fr;}} .th-b{{text-align:start;}}}}
 </style>""")
 
 
@@ -231,10 +267,13 @@ hero_cfg = {
     "regions": [{"n": rname(r), "m": f"{clear_minutes[r]:g}"} for r in alerts["Region"].value_counts().index],
     "ph_h": t("ph_h"), "ph_b": t("ph_b", r="{r}"), "ph_eta": t("ph_eta", m="{m}"),
     "ph_ok_h": t("ph_ok_h"), "ph_ok_b": t("ph_ok_b", r="{r}"), "loc": LOC,
+    "ticker": [{"r": rname(x.Region), "d": fmt_day(x.datetime).rsplit(" ", 1)[0], "t": f"{x.datetime:%H:%M}",
+                "m": (f"{x.duration_min:g} {t('min')}" if pd.notna(x.duration_min) else "–")}
+               for x in alerts.sort_values("datetime", ascending=False).head(14).itertuples()],
 }
 components.html(ui.HERO.replace("__CFG__", json.dumps(hero_cfg, ensure_ascii=False)).replace("__DIR__", DIR)
                 .replace("__BADGE__", t("badge", n=len(alerts))).replace("__TITLE__", t("title"))
-                .replace("__T2__", t("title2")).replace("__DEMO__", t("ph_demo")), height=480)
+                .replace("__T2__", t("title2")).replace("__DEMO__", t("ph_demo")).replace("__LIVE__", t("live")), height=550)
 
 html(f'<div class="g-line"><div class="g-out">{t("outlook", t=fmt_day(tomorrow, True), d=fmt_day(today))}</div>'
      f'<div class="g-warn">⚠️ {t("warn")}</div></div>')
@@ -247,10 +286,10 @@ tab1, tab2, tab3, tab4 = st.tabs([t("tab1"), t("tab2"), t("tab3"), t("tab4")])
 
 # ---------------------------------------------------------------- tab 1: one region, three outputs
 with tab1:
-    c_a, c_b = st.columns([1, 1.6], gap="large")
+    c_a, c_b = st.columns([1.7, 1], gap="large")
     with c_a:
-        region = st.selectbox(t("region"), regions, index=regions.index("Riyadh") if "Riyadh" in regions else 0,
-                              format_func=rname)
+        region = st.pills(t("region"), regions, default="Riyadh" if "Riyadh" in regions else regions[0],
+                          format_func=rname, key="region") or ("Riyadh" if "Riyadh" in regions else regions[0])
     with c_b:
         school_value = st.segmented_control(t("school", r=rname(region)), [0, 1], default=0,
                                             format_func=lambda v: t("school_yes") if v else t("school_no"))
@@ -299,6 +338,14 @@ with tab1:
                 "h3": t("h3"), "s3": t("s3", r=rname(region), m=f"{minutes:g}" if pd.notna(minutes) else "–"),
                 "f3": t("f3"), "cl": t("cl"), "iqr": t("iqr", a=f"{q25:g}", b=f"{q75:g}")},
     }
+    lv_color = {"High": "#FF2D55", "Medium": "#FFC233", "Low": "#51CF66"}[level]
+    lit = round(risk[region] * 24)
+    blocks = "".join(f'<i class="{"on" if k < lit else ""}" style="animation-delay:{k * 0.04:.2f}s"></i>' for k in range(24))
+    html(f'''<div class="threat" style="--lv:{lv_color}">
+  <div class="th-a"><span class="th-dot"></span><div><div class="th-k">{t("threat_k")}</div><div class="th-r">{rname(region)}</div></div></div>
+  <div class="th-m">{blocks}</div>
+  <div class="th-b"><div class="th-p">{risk[region]:.0%}</div><div class="th-l">{lname(level)} · {t("threat_p")}</div></div>
+</div>''')
     components.html(ui.OUTLOOK.replace("__CFG__", json.dumps(out_cfg, ensure_ascii=False)).replace("__DIR__", DIR),
                     height=580)
 
@@ -362,6 +409,8 @@ until {info['trained_until']}; uploading a newer tweets file updates the inputs,
     html(f'<div class="g-card">{body}</div>')
 
 # ---------------------------------------------------------------- footer
-html(f'''<div style="direction:{DIR}; text-align:center; margin:34px 0 10px; font-size:1.25rem; font-weight:800;
-  letter-spacing:.3px; background:linear-gradient(90deg,#FFD0AE,#FF7A33); -webkit-background-clip:text; background-clip:text;
-  color:transparent;">{t("slogan")}</div>''')
+html(f'''<div style="direction:{DIR}; display:flex; align-items:center; gap:18px; margin:40px 0 12px;">
+  <span style="flex:1; height:1px; background:linear-gradient(90deg,transparent,#FF2D55);"></span>
+  <span style="font-family:'Cairo',sans-serif; font-size:1.35rem; font-weight:900; color:#FF2D55; letter-spacing:.5px;
+    text-shadow:0 0 18px rgba(255,45,85,.55);">{t("slogan")}</span>
+  <span style="flex:1; height:1px; background:linear-gradient(90deg,#FF2D55,transparent);"></span></div>''')
