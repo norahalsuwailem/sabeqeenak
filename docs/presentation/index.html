@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>سابقينك · العرض</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;600;700;800;900&family=Noto+Kufi+Arabic:wght@800;900&display=swap">
+<script src="a/data.js"></script>
+<style>
+/* One 1920x1080 stage scaled to the window. Live radar map of Saudi Arabia behind every slide, glass HUD cards in front. */
+:root{
+  --bg:#0C0D11; --panel:#15161D; --panel2:#1D1F28; --line:#2F313C; --ink:#EBECEF; --mute:#9FA1AC; --dim:#6B6E7B;
+  --red:#FF2D55; --red2:#E80C38; --amber:#FFC233; --green:#51CF66; --violet:#7B6CF6; --orange:#FF8A3D;
+  --txt:"IBM Plex Sans Arabic","Geeza Pro","Segoe UI",Arial,sans-serif; --hd:"Cairo","IBM Plex Sans Arabic","Geeza Pro",sans-serif;
+  --title:"Noto Kufi Arabic","Cairo","Geeza Pro",sans-serif; --num:"Inter","Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#050608;color:var(--ink);font-family:var(--txt);overflow:hidden}
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050608}
+#stage{position:relative;width:1920px;height:1080px;flex:none;overflow:hidden;transform-origin:center center;direction:rtl;
+  background:radial-gradient(1400px 800px at 30% 45%,#1A1218 0%,#0F1015 45%,var(--bg) 100%)}
+#bg{position:absolute;inset:0;width:1920px;height:1080px}
+#scan{position:absolute;inset:0;pointer-events:none;opacity:.45;background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 4px)}
+#grid{position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 100% at 50% 45%,transparent 55%,rgba(0,0,0,.65) 100%)}
+#wipe{position:absolute;top:0;bottom:0;width:340px;pointer-events:none;opacity:0;z-index:30;
+  background:linear-gradient(90deg,transparent,rgba(255,45,85,.10) 45%,rgba(255,45,85,.55) 50%,rgba(255,45,85,.10) 55%,transparent)}
+#wipe.go{animation:wipe .75s cubic-bezier(.5,0,.3,1)}
+@keyframes wipe{0%{right:-340px;opacity:1}100%{right:1920px;opacity:1}}
+/* chrome */
+#top{position:absolute;top:0;left:0;right:0;height:92px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;z-index:20}
+#brand{display:flex;align-items:center;gap:16px;font-family:var(--title);font-weight:900;font-size:30px;color:#fff}
+#brand i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 14px var(--red);animation:blink 1.4s infinite}
+#brand span{font-family:var(--hd);font-size:20px;font-weight:700;color:var(--mute);padding-inline-start:16px;border-inline-start:1px solid var(--line)}
+#meta{display:flex;align-items:center;gap:22px;font-family:var(--num);font-size:20px;color:var(--mute);direction:ltr}
+#meta img{height:40px;opacity:.85}
+#meta b{color:#fff}
+#prog{position:absolute;top:92px;left:64px;right:64px;height:2px;background:#22242D;z-index:20}
+#prog i{position:absolute;top:0;bottom:0;right:0;width:0;background:linear-gradient(270deg,var(--red),#FF8FA3);box-shadow:0 0 12px var(--red);transition:width .6s}
+#disc{position:absolute;bottom:26px;left:64px;z-index:20;font-size:15px;color:var(--dim);display:flex;gap:10px;align-items:center}
+#disc i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+#hint{position:absolute;bottom:26px;right:64px;z-index:20;font-size:15px;color:var(--dim);font-family:var(--num);direction:ltr;transition:opacity 1s}
+@keyframes blink{50%{opacity:.25}}
+/* slides */
+.slide{position:absolute;inset:0;padding:150px 140px 90px;opacity:0;visibility:hidden;transform:scale(1.015);transition:opacity .55s,transform .7s cubic-bezier(.2,.8,.3,1),visibility 0s .55s;z-index:10}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .6s .15s,transform .8s .15s cubic-bezier(.2,.8,.3,1),visibility 0s}
+.rv{opacity:0}
+.slide.active .rv{animation:rv .85s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(var(--d,0) * 1ms + 250ms)}
+@keyframes rv{from{opacity:0;transform:translateY(34px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.kicker{font-family:var(--hd);font-size:24px;font-weight:800;color:var(--red);letter-spacing:.5px;display:flex;align-items:center;gap:14px}
+.kicker:before{content:"";width:34px;height:3px;background:var(--red);box-shadow:0 0 10px var(--red)}
+h2{font-family:var(--hd);font-size:68px;font-weight:900;line-height:1.2;margin:14px 0 0;color:#fff}
+h2 em{font-style:normal;color:var(--red)}
+.lead{font-size:30px;line-height:1.6;color:#CACCD3;margin:18px 0 0;max-width:1300px}
+.card{position:relative;background:linear-gradient(165deg,rgba(29,31,40,.88),rgba(21,22,29,.88));border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(8px)}
+.hud:after{content:"";position:absolute;inset:9px;pointer-events:none;
+  background:linear-gradient(var(--red),var(--red)) top left/22px 3px no-repeat,linear-gradient(var(--red),var(--red)) top left/3px 22px no-repeat,
+  linear-gradient(var(--red),var(--red)) top right/22px 3px no-repeat,linear-gradient(var(--red),var(--red)) top right/3px 22px no-repeat,
+  linear-gradient(var(--red),var(--red)) bottom left/22px 3px no-repeat,linear-gradient(var(--red),var(--red)) bottom left/3px 22px no-repeat,
+  linear-gradient(var(--red),var(--red)) bottom right/22px 3px no-repeat,linear-gradient(var(--red),var(--red)) bottom right/3px 22px no-repeat}
+.n{font-family:var(--num);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.chip{display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:999px;font-size:21px;font-weight:700;background:rgba(255,45,85,.12);border:1px solid rgba(255,45,85,.45);color:#FF8FA3}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite}
+/* 1 hook */
+#s-hook .wrap{position:absolute;inset:0;display:grid;grid-template-columns:1fr 760px;align-items:center;padding:110px 140px 60px}
+#s-hook h1{font-family:var(--title);font-size:210px;font-weight:900;line-height:1.5;margin:6px 0 0;padding:0 .04em .1em;
+  background:linear-gradient(90deg,#fff 0%,#FFD1DA 35%,#FF2D55 62%,#fff 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 40px rgba(255,45,85,.35));animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:220% center}}
+#s-hook .t2{font-family:var(--hd);font-size:54px;font-weight:700;color:#fff;margin-top:-20px}
+#s-hook .t3{font-size:28px;color:var(--mute);margin-top:22px;line-height:1.6;max-width:900px}
+.pw{position:relative;display:flex;justify-content:center;align-items:center;height:860px}
+.rings{position:absolute;width:640px;height:640px}
+.rings i{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,45,85,.45);opacity:0}
+.rings.go i{animation:wave 2.4s ease-out}.rings.go i:nth-child(2){animation-delay:.35s}.rings.go i:nth-child(3){animation-delay:.7s}
+@keyframes wave{0%{transform:scale(.3);opacity:.9}100%{transform:scale(1.05);opacity:0}}
+.phone{position:relative;width:340px;height:680px;border-radius:62px;background:#060709;border:3px solid #393B47;padding:20px;
+  box-shadow:0 40px 110px rgba(0,0,0,.7),0 0 80px rgba(255,45,85,.10),inset 0 0 0 9px #121319;transition:box-shadow .5s}
+.phone.alert{box-shadow:0 40px 110px rgba(0,0,0,.7),0 0 130px rgba(255,20,67,.55),inset 0 0 0 9px #121319}
+.phone.okay{box-shadow:0 40px 110px rgba(0,0,0,.7),0 0 110px rgba(60,200,100,.38),inset 0 0 0 9px #121319}
+.phone.buzz{animation:buzz .42s linear 3}
+@keyframes buzz{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-7px) rotate(-2.5deg)}75%{transform:translateX(7px) rotate(2.5deg)}}
+.scr{position:relative;height:100%;border-radius:44px;overflow:hidden;background:linear-gradient(180deg,#2A2C38 0%,#121319 65%)}
+.scr:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,20,67,.5),transparent 60%);opacity:0;transition:opacity .4s}
+.phone.alert .scr:after{opacity:1;animation:strobe 1s ease-in-out infinite}
+@keyframes strobe{50%{opacity:.25}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:118px;height:32px;background:#000;border-radius:18px;z-index:4}
+.clock{position:relative;z-index:2;text-align:center;margin-top:84px;font-family:var(--num);font-size:84px;font-weight:300;color:#fff;direction:ltr}
+.pdate{position:relative;z-index:2;text-align:center;font-size:19px;color:#B2B3BB}
+.nt{position:absolute;z-index:3;left:14px;right:14px;top:250px;border-radius:24px;padding:18px 20px;background:rgba(38,20,24,.95);border:1px solid rgba(255,45,85,.6);
+  box-shadow:0 14px 34px rgba(0,0,0,.5);transform:translateY(-70px) scale(.92);opacity:0;transition:all .55s cubic-bezier(.2,.9,.3,1.25)}
+.nt.show{transform:none;opacity:1}
+.nt .h{font-size:17px;font-weight:800;color:#FF8FA3}
+.nt .b{font-size:20px;color:#fff;margin-top:7px;line-height:1.45}
+.nt .eta{font-size:16px;color:#FFD1DA;margin-top:10px}
+.nt .pr{height:5px;border-radius:5px;background:rgba(255,255,255,.12);margin-top:9px;overflow:hidden}
+.nt .pr i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF8FA3,var(--red))}
+.nt.ok{border-color:rgba(81,207,102,.65);background:rgba(14,34,22,.95)}.nt.ok .h{color:#69DB7C}
+.demo{position:absolute;z-index:3;bottom:24px;left:0;right:0;text-align:center;font-size:14px;color:#6B6E7B}
+/* 2 team */
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;margin-top:110px}
+.mem{height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+.av{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;font-family:var(--hd);font-size:70px;font-weight:900;color:#fff;
+  background:radial-gradient(circle at 35% 30%,#FF6A85,var(--red2) 60%,#7A0A22);box-shadow:0 0 0 8px rgba(255,45,85,.12),0 0 50px rgba(255,45,85,.35)}
+.mem b{font-family:var(--hd);font-size:42px;font-weight:800}
+.org{display:flex;align-items:center;gap:28px;margin-top:70px;font-size:28px;color:var(--mute)}
+.org img{height:70px}
+/* 3 toc */
+.toc{list-style:none;padding:0;margin:56px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:22px 60px;max-width:1500px}
+.toc li{display:flex;align-items:center;gap:26px;padding:24px 30px;font-family:var(--hd);font-size:36px;font-weight:800;cursor:pointer;transition:all .25s}
+.toc li .n{font-size:30px;color:var(--red);width:58px}
+.toc li:hover{border-color:rgba(255,45,85,.6);background:rgba(255,45,85,.08);transform:translateX(-8px)}
+/* 4 problem */
+.prob{display:grid;grid-template-columns:1fr 640px;gap:80px;margin-top:40px;align-items:start}
+.qs{display:grid;gap:26px}
+.q{display:flex;align-items:center;gap:30px;padding:32px 36px}
+.q .n{font-size:64px;font-weight:900;color:var(--red);width:110px;text-shadow:0 0 24px rgba(255,45,85,.45)}
+.q b{font-family:var(--hd);font-size:46px;font-weight:800;color:#fff}
+.q span{display:block;font-size:24px;color:var(--mute);margin-top:6px}
+.alertcard{padding:36px 40px;border-color:rgba(255,45,85,.55);box-shadow:0 0 60px rgba(255,45,85,.18);margin-top:30px}
+.alertcard .h{font-size:24px;font-weight:800;color:#FF8FA3;display:flex;gap:12px;align-items:center}
+.alertcard .h i{width:12px;height:12px;border-radius:50%;background:var(--red);animation:blink 1s infinite}
+.alertcard p{font-size:32px;line-height:1.55;margin:16px 0 0;color:#fff}
+.alertcard small{display:block;margin-top:20px;font-size:18px;color:var(--dim)}
+.gap{margin-top:30px;padding:26px 34px;font-size:26px;line-height:1.6;color:#CACCD3}
+.gap b{color:#fff}
+/* 5 data */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-top:50px}
+.st{padding:28px 26px;border-top:3px solid var(--red)}
+.st b{display:block;font-size:76px;font-weight:900;line-height:1;color:#fff;text-align:start}
+.st span{display:block;font-size:24px;color:var(--mute);margin-top:12px}
+.pair{display:grid;grid-template-columns:1fr 260px 1fr 330px;gap:0;align-items:center;margin-top:60px}
+.tw{padding:26px 30px}
+.tw .h{display:flex;justify-content:space-between;font-size:20px;color:var(--mute)}
+.tw .h b{color:#FF8FA3;font-weight:800}
+.tw.cl .h b{color:#69DB7C}
+.tw p{font-size:28px;margin:12px 0 0;color:#fff}
+.tw .t{font-size:44px;font-weight:800;color:#fff;margin-top:10px}
+.link{position:relative;height:6px;margin:0 14px;background:#2A2C35;border-radius:6px;overflow:hidden}
+.link i{position:absolute;inset:0;background:linear-gradient(270deg,var(--red),var(--green));transform-origin:right;transform:scaleX(0)}
+.slide.active .link i{animation:grow 1.4s 1.2s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes grow{to{transform:scaleX(1)}}
+.link span{position:absolute;top:-38px;left:0;right:0;text-align:center;font-size:20px;color:var(--mute)}
+.res{margin-inline-start:30px;padding:26px 28px;text-align:center;border-color:rgba(255,45,85,.55)}
+.res b{display:block;font-size:66px;font-weight:900;color:#fff;line-height:1}
+.res span{font-size:22px;color:var(--mute)}
+.src{margin-top:40px;font-size:22px;color:var(--dim)}
+/* 6 findings */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+.f{padding:20px 30px 18px;height:362px}
+.f h3{font-family:var(--hd);font-size:31px;font-weight:800;margin:0;color:#fff}
+.f h3 em{font-style:normal;color:var(--red)}
+.f .s{font-size:20px;color:var(--mute);margin-top:4px}
+.bars{display:grid;gap:5px;margin-top:14px}
+.br{display:grid;grid-template-columns:170px 1fr 74px;gap:14px;align-items:center;font-size:18px;line-height:1.28;color:#CACCD3}
+.br .tr{height:11px;border-radius:14px;background:#22242D;overflow:hidden}
+.br .tr i{display:block;height:100%;width:0;border-radius:14px;background:linear-gradient(270deg,#FF6A85,var(--red2));transition:width 1.3s cubic-bezier(.2,.8,.3,1)}
+.br b{font-family:var(--num);color:#fff;text-align:end;direction:ltr}
+.br.top{color:#fff;font-weight:700}
+.cal{display:grid;grid-template-columns:repeat(11,1fr);grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:7px;margin-top:22px;height:230px;direction:rtl}
+.cal i{border-radius:5px;background:#22242D;transition:background .4s,box-shadow .4s}
+.cal i.on{background:var(--red);box-shadow:0 0 10px rgba(255,45,85,.6)}
+.cal i.h2{background:#FF6A85}.cal i.h3{background:#FFD1DA}
+.per{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:22px;height:235px;align-items:end}
+.pc{display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.pc .v{font-family:var(--num);font-size:30px;font-weight:900;color:#fff;margin-bottom:8px}
+.pc .bx{width:72%;height:0;border-radius:10px 10px 4px 4px;transition:height 1.3s cubic-bezier(.2,.8,.3,1)}
+.pc .l{font-size:21px;color:#CACCD3;margin-top:10px}.pc .l small{display:block;font-size:15px;color:var(--dim);direction:ltr}
+/* 7 replay */
+.rp{display:grid;grid-template-columns:560px 1fr;gap:50px;margin-top:20px;height:780px}
+.rp .side{display:flex;flex-direction:column;gap:20px}
+.rp .date{font-family:var(--hd);font-size:52px;font-weight:900;color:#fff;line-height:1.2}
+.rp .sub{font-size:22px;color:var(--mute)}
+.rp .cnt{padding:20px 26px;display:flex;align-items:baseline;gap:16px}
+.rp .cnt b{font-size:84px;font-weight:900;color:#fff;line-height:1}
+.rp .cnt span{font-size:24px;color:var(--mute)}
+.race{position:relative;height:300px}
+.row{position:absolute;left:0;right:0;height:32px;display:grid;grid-template-columns:150px 1fr 54px;gap:14px;align-items:center;transition:top .45s cubic-bezier(.2,.8,.3,1);font-size:21px;color:#CACCD3}
+.row .t{height:12px;border-radius:12px;background:#22242D;overflow:hidden}
+.row .t i{display:block;height:100%;width:0;border-radius:12px;background:linear-gradient(270deg,#FF6A85,var(--red2));transition:width .35s}
+.row b{font-family:var(--num);color:#fff;text-align:end}
+.row.hit{color:#FF8FA3}
+.rp .mapbox{position:relative}
+.rp svg{position:absolute;inset:0;width:100%;height:100%;direction:ltr}
+.land{fill:rgba(255,255,255,.035);stroke:#5A5D6B;stroke-width:2}
+.rdot{fill:#4A4D59;transition:fill .3s}
+.rlb{fill:#9FA1AC;font-size:19px;font-weight:600;font-family:var(--txt)}
+.rpl{transform-box:fill-box;transform-origin:center;animation:rpl 1.8s ease-out forwards}
+@keyframes rpl{0%{transform:scale(.2);opacity:1}100%{transform:scale(3.4);opacity:0}}
+.hist{position:absolute;left:0;right:0;bottom:0;height:90px;display:flex;align-items:flex-end;gap:3px;direction:ltr;cursor:pointer}
+.hist i{flex:1;background:#2A2C35;border-radius:3px 3px 0 0;min-height:3px;transition:background .3s}
+.hist i.p{background:var(--red)}
+.hist .ph{position:absolute;top:-8px;bottom:0;width:3px;background:#fff;box-shadow:0 0 12px var(--red);left:0}
+.ctl{display:flex;gap:12px}
+.btn{font-family:var(--hd);cursor:pointer;border:1px solid var(--line);background:#1A1B22;color:var(--ink);border-radius:12px;padding:10px 22px;font-size:20px;font-weight:700}
+.btn:hover{border-color:var(--red)} .btn.on{background:rgba(255,45,85,.16);border-color:var(--red);color:#FF8FA3}
+/* 8 solution */
+.sol{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:40px}
+.out{padding:28px 30px 26px;height:640px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.out .q{all:unset;font-size:22px;color:var(--mute)}
+.out h3{font-family:var(--hd);font-size:40px;font-weight:900;margin:6px 0 0;color:#fff}
+.out svg{margin-top:16px;overflow:visible;direction:ltr}
+.out .m{margin-top:auto;font-size:21px;color:#FF8FA3;padding:8px 18px;border-radius:999px;border:1px solid rgba(255,45,85,.45);background:rgba(255,45,85,.08)}
+.ex{margin-top:26px;font-size:22px;color:var(--dim);text-align:center}
+/* 9 models */
+.mods{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:34px}
+.mod{padding:30px 36px;height:440px}
+.mod .tp{display:flex;justify-content:space-between;align-items:center}
+.mod h3{font-family:var(--hd);font-size:40px;font-weight:900;margin:0}
+.mod .alg{font-family:var(--num);font-size:24px;font-weight:800;color:#fff;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.5);padding:8px 18px;border-radius:10px;direction:ltr}
+.mod .y{font-size:23px;color:var(--mute);margin-top:12px}
+.mod ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px}
+.mod li{font-size:24px;color:#DCDDE2;display:flex;gap:14px;align-items:center}
+.mod li:before{content:"";width:8px;height:8px;border-radius:2px;background:var(--red);flex:none}
+.mod li em{font-style:normal;font-size:17px;color:var(--amber);border:1px solid rgba(255,194,51,.5);border-radius:8px;padding:2px 10px}
+.mod .hp{margin-top:18px;font-size:19px;color:var(--dim);direction:ltr;text-align:right;font-family:var(--num)}
+.split{margin-top:30px;padding:24px 34px}
+.split .tl{display:flex;height:54px;border-radius:12px;overflow:hidden;margin-top:14px;direction:rtl;font-size:21px;font-weight:700}
+.split .tr{flex:49;display:grid;place-items:center;background:#2A2C35;color:#DCDDE2}
+.split .te{flex:21;display:grid;place-items:center;background:linear-gradient(90deg,var(--red2),#FF6A85);color:#fff}
+.split p{margin:0;font-size:24px;color:#CACCD3}
+/* 10 results */
+.resg{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;margin-top:34px}
+.rc{padding:30px 36px;height:520px}
+.rc h3{font-family:var(--hd);font-size:38px;font-weight:900;margin:0}
+.rc .cap{font-size:23px;color:#CACCD3;margin-top:8px}
+.rc .cap b{color:#FF8FA3}
+.metric{margin-top:26px}
+.metric .lb{display:flex;justify-content:space-between;font-size:22px;color:var(--mute);margin-bottom:8px}
+.metric .lb b{color:#fff;font-family:var(--num)}
+.mb{display:grid;gap:7px}
+.mb div{display:grid;grid-template-columns:230px 1fr 70px;gap:14px;align-items:center;font-size:19px;color:#CACCD3}
+.mb .tr{height:20px;border-radius:6px;background:#22242D;overflow:hidden}
+.mb .tr i{display:block;height:100%;width:0;border-radius:6px;transition:width 1.3s cubic-bezier(.2,.8,.3,1)}
+.mb .us i{background:linear-gradient(270deg,#FF6A85,var(--red2));box-shadow:0 0 14px rgba(255,45,85,.45)}
+.mb .bl i{background:#5A5D6B}
+.mb span.v{font-family:var(--num);font-weight:800;color:#fff;text-align:end}
+.trans{margin-top:26px;padding:22px 30px;border:1px dashed rgba(255,194,51,.6);border-radius:14px;background:rgba(255,194,51,.06);font-size:22px;line-height:1.6;color:#FFE3A1}
+.trans b{color:#fff}
+/* 11 demo */
+.dm{display:grid;grid-template-columns:1fr 1090px;gap:50px;margin-top:20px;align-items:start}
+.vid{position:relative;height:720px;padding:16px;display:flex;flex-direction:column}
+.vid video{width:100%;flex:1;object-fit:contain;background:#000;border-radius:10px}
+.tabs{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.dl{display:grid;gap:18px;margin-top:30px}
+.dl div{display:flex;gap:18px;align-items:center;font-size:27px;color:#DCDDE2}
+.dl div .n{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:rgba(255,45,85,.14);border:1px solid rgba(255,45,85,.45);color:#FF8FA3;font-size:22px;font-weight:800}
+.app{margin-top:40px;padding:24px 28px;font-size:22px;color:var(--mute)}
+.app a,.app code{display:block;margin-top:10px;font-family:var(--num);font-size:26px;color:#fff;direction:ltr;text-align:right;word-break:break-all;text-decoration:none}
+/* 12 limits */
+.lf{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:40px}
+.lf .card{padding:34px 40px;height:460px}
+.lf h3{font-family:var(--hd);font-size:42px;font-weight:900;margin:0 0 20px}
+.lf ul{list-style:none;padding:0;margin:0;display:grid;gap:24px}
+.lf li{font-size:28px;line-height:1.5;color:#DCDDE2;display:flex;gap:18px}
+.lf li:before{content:"";width:10px;height:10px;margin-top:16px;border-radius:2px;background:var(--red);flex:none}
+.lf .fut li:before{background:var(--green)}
+/* 13 closing */
+#s-end .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#s-end h1{font-family:var(--title);font-size:200px;font-weight:900;line-height:1.5;margin:0;padding:0 .04em .1em;color:#fff;filter:drop-shadow(0 0 50px rgba(255,45,85,.45))}
+#s-end .ty{font-family:var(--hd);font-size:64px;font-weight:900;color:var(--red);margin-top:-14px}
+#s-end .qa{font-size:34px;color:#CACCD3;margin-top:16px}
+#s-end .names{margin-top:56px;font-family:var(--hd);font-size:30px;font-weight:700;color:var(--mute);display:flex;gap:26px}
+#s-end .names b{color:#fff}
+/* presenter notes (outside the stage, not scaled) */
+#notes{position:fixed;left:0;right:0;bottom:0;max-height:42vh;overflow:auto;z-index:100;direction:rtl;background:rgba(10,11,15,.96);border-top:2px solid var(--red);
+  padding:16px 28px 20px;font-family:var(--txt);display:none;box-shadow:0 -20px 50px rgba(0,0,0,.6)}
+#notes.on{display:block}
+#notes .hd{display:flex;gap:22px;align-items:center;font-family:var(--hd);font-size:18px;color:var(--mute)}
+#notes .hd b{color:#fff;font-size:22px}
+#notes .hd .tm{font-family:var(--num);color:#FF8FA3;direction:ltr}
+#notes .hd .clk{margin-inline-start:auto;font-family:var(--num);font-size:28px;font-weight:800;color:#fff;direction:ltr}
+#notes p{font-size:22px;line-height:1.75;margin:10px 0 0;color:#EBECEF}
+#notes .nx{font-size:16px;color:var(--dim);margin-top:8px}
+</style>
+</head>
+<body>
+<div id="deck"><div id="stage">
+  <canvas id="bg" width="1920" height="1080"></canvas><div id="grid"></div><div id="scan"></div><div id="vig"></div><div id="wipe"></div>
+  <div id="top"><div id="brand"><i></i>سابقينك<span id="sec"></span></div><div id="meta"><span><b id="cur">01</b> / <span id="tot">13</span></span><img src="a/logo_tuwaiq.png" alt="" onerror="this.remove()"></div></div>
+  <div id="prog"><i></i></div>
+  <div id="disc"><i></i>مشروع طلابي · لا يغني عن التنبيهات الرسمية · اتبع دائماً تعليمات الدفاع المدني</div>
+  <div id="hint">← → navigate · F fullscreen · N notes</div>
+
+  <!-- 1. hook -->
+  <section class="slide" id="s-hook" data-bg="hook" data-sec="" data-title="البداية" data-time="00:00–00:25"
+    data-notes="(انتظروا الجوال يهتز مرة وحدة قبل ما تبدون). كلنا وصلتنا هالرسالة على الجوال: إنذار مبكر، ابق في مكان آمن. وأول شي يجي في بالك: هل بيتكرر؟ ومتى؟ وكم بيطول؟ إحنا سابقينك: نجاوب على هالأسئلة لكل منطقة، من إنذارات الدفاع المدني الرسمية.">
+    <div class="wrap">
+      <div>
+        <span class="chip rv" style="--d:0"><i></i>مبني على <span class="n" id="hk-n">190</span> إنذار رسمي من الدفاع المدني</span>
+        <div class="rv" style="--d:120"><h1>سابقينك</h1></div>
+        <div class="t2 rv" style="--d:240">متنبئ مخاطر الإنذار المبكر</div>
+        <div class="t3 rv" style="--d:360">توقعات لكل منطقة في السعودية لبكرة: هل بيصير إنذار، وفي أي وقت، وكم ياخذ لين يزول الخطر.</div>
+      </div>
+      <div class="pw rv" style="--d:200"><div class="rings" id="rg"><i></i><i></i><i></i></div>
+        <div class="phone" id="ph"><div class="scr"><div class="notch"></div>
+          <div class="clock" id="clk">02:14</div><div class="pdate" id="pd"></div>
+          <div class="nt" id="nt"><div class="h" id="nh"></div><div class="b" id="nb"></div><div class="eta" id="ne"></div><div class="pr"><i id="np"></i></div></div>
+          <div class="demo">محاكاة · ليس إنذاراً حقيقياً</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- 2. team -->
+  <section class="slide" id="s-team" data-bg="dim" data-sec="الفريق" data-title="الفريق" data-time="00:25–00:40"
+    data-notes="عرّفوا بنفسكم بسرعة: إحنا أربعة من معسكر علم البيانات والذكاء الاصطناعي في أكاديمية طويق: شادن، نوره، الجوهرة، وسليمان.">
+    <div class="kicker rv">الفريق</div>
+    <h2 class="rv" style="--d:80">أعضاء الفريق</h2>
+    <div class="team">
+      <div class="card hud mem rv" style="--d:200"><div class="av">ش</div><b>شادن</b></div>
+      <div class="card hud mem rv" style="--d:300"><div class="av">ن</div><b>نوره</b></div>
+      <div class="card hud mem rv" style="--d:400"><div class="av">ج</div><b>الجوهرة</b></div>
+      <div class="card hud mem rv" style="--d:500"><div class="av">س</div><b>سليمان</b></div>
+    </div>
+    <div class="org rv" style="--d:650"><img src="a/logo_tuwaiq.png" alt="" onerror="this.remove()">أكاديمية طويق · معسكر علم البيانات والذكاء الاصطناعي · مشروع تعلّم الآلة النهائي</div>
+  </section>
+
+  <!-- 3. contents -->
+  <section class="slide" id="s-toc" data-bg="left" data-sec="المحتويات" data-title="المحتويات" data-time="00:40–00:50"
+    data-notes="البنود تنضغط: لو احتجتوا ترجعون لأي جزء وقت الأسئلة، اضغطوا عليه مباشرة.">
+    <div class="kicker rv">المحتويات</div>
+    <h2 class="rv" style="--d:80">وش بنعرض اليوم</h2>
+    <ol class="toc">
+      <li class="card rv" style="--d:180" data-go="s-prob"><span class="n">01</span>المشكلة</li>
+      <li class="card rv" style="--d:240" data-go="s-data"><span class="n">02</span>البيانات</li>
+      <li class="card rv" style="--d:300" data-go="s-eda"><span class="n">03</span>وش اكتشفنا</li>
+      <li class="card rv" style="--d:360" data-go="s-sol"><span class="n">04</span>الحل</li>
+      <li class="card rv" style="--d:420" data-go="s-mod"><span class="n">05</span>الموديلات والنتائج</li>
+      <li class="card rv" style="--d:480" data-go="s-demo"><span class="n">06</span>عرض حي</li>
+      <li class="card rv" style="--d:540" data-go="s-lim"><span class="n">07</span>القيود والخطوات الجاية</li>
+    </ol>
+  </section>
+
+  <!-- 4. problem -->
+  <section class="slide" id="s-prob" data-bg="left" data-sec="المشكلة" data-title="المشكلة" data-time="00:50–01:20"
+    data-notes="لما يوصل الإنذار، الرسالة تقول لك فيه خطر، بس ما تقول لك وش تتوقع بعدها. الناس تسأل ثلاث أسئلة: هل منطقتي بيجيها إنذار بكرة؟ لو صار، في أي وقت من اليوم؟ وكم ياخذ لين يزول الخطر؟ هدفنا نجاوب على هالأسئلة من البيانات نفسها.">
+    <div class="kicker rv">المشكلة</div>
+    <h2 class="rv" style="--d:80">لما يوصلك الإنذار، تجيك <em>ثلاث أسئلة</em></h2>
+    <div class="prob">
+      <div class="qs">
+        <div class="card hud q rv" style="--d:250"><span class="n">01</span><div><b>هل بيجي منطقتي إنذار بكرة؟</b><span>عشان أستعد، وأقرر دوامي ومشاويري</span></div></div>
+        <div class="card hud q rv" style="--d:450"><span class="n">02</span><div><b>لو صار، في أي وقت من اليوم؟</b><span>ليل، صباح، ظهر وعصر، أو مساء</span></div></div>
+        <div class="card hud q rv" style="--d:650"><span class="n">03</span><div><b>كم ياخذ لين يزول الخطر؟</b><span>كم دقيقة أبقى في المكان الآمن</span></div></div>
+      </div>
+      <div>
+        <div class="card alertcard rv" style="--d:300"><div class="h"><i></i>إنذار مبكر</div><p>ابقَ في مكان آمن لين يُعلن زوال الخطر.</p><small>رسالة توضيحية · محاكاة</small></div>
+        <div class="card gap rv" style="--d:800">الرسالة تقول لك <b>فيه خطر</b>، بس ما تقول لك <b>وش تتوقع بعدها</b>. وهذا اللي نحاول نجاوب عليه من البيانات.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. data -->
+  <section class="slide" id="s-data" data-bg="dim" data-sec="البيانات" data-title="البيانات" data-time="01:20–02:00"
+    data-notes="البيانات جمعناها بأنفسنا من حساب الدفاع المدني الرسمي: كل تغريدة إنذار وكل تغريدة زوال من 1 سبتمبر لين 10 نوفمبر. يعني 382 تغريدة: 190 إنذار و192 زوال في 8 مناطق. وربطنا كل إنذار بزواله عن طريق رقم Alert_ID، ومنها طلعت مدة كل إنذار. مثال: إنذار أبها يوم 8 سبتمبر الساعة 7:59، وزال 8:05، يعني 6 دقائق.">
+    <div class="kicker rv">البيانات</div>
+    <h2 class="rv" style="--d:80">جمعناها <em>بأنفسنا</em> من الحساب الرسمي</h2>
+    <div class="stats">
+      <div class="card st rv" style="--d:200"><b class="n cnt" data-k="tweets">0</b><span>تغريدة</span></div>
+      <div class="card st rv" style="--d:280"><b class="n cnt" data-k="alerts">0</b><span>إنذار</span></div>
+      <div class="card st rv" style="--d:360"><b class="n cnt" data-k="clears">0</b><span>تغريدة زوال خطر</span></div>
+      <div class="card st rv" style="--d:440"><b class="n cnt" data-k="n_regions">0</b><span>مناطق</span></div>
+      <div class="card st rv" style="--d:520"><b class="n cnt" data-k="days">0</b><span>يوم · 1 سبتمبر إلى 10 نوفمبر 2026</span></div>
+    </div>
+    <div class="pair">
+      <div class="card tw rv" style="--d:700"><div class="h"><b>إنذار</b><span class="n">AL-002</span></div><p>عسير · أبها · 8 سبتمبر</p><div class="t n">19:59</div></div>
+      <div class="link rv" style="--d:900"><span>نفس الرقم Alert_ID</span><i></i></div>
+      <div class="card tw cl rv" style="--d:1000"><div class="h"><b>زوال الخطر</b><span class="n">AL-002</span></div><p>عسير · أبها · 8 سبتمبر</p><div class="t n">20:05</div></div>
+      <div class="card hud res rv" style="--d:1300"><b class="n">6</b><span>دقائق = مدة الإنذار</span></div>
+    </div>
+    <div class="src rv" style="--d:1500">المصدر: حساب الدفاع المدني على X (@SaudiDCD) · كل تغريدة محفوظة برابطها في ملف البيانات</div>
+  </section>
+
+  <!-- 6. findings -->
+  <section class="slide" id="s-eda" data-bg="dim" data-sec="وش اكتشفنا" data-title="وش اكتشفنا" data-time="02:00–02:50"
+    data-notes="أربع اكتشافات من التحليل: أولاً، عسير لحالها جاها 35% من الإنذارات، وبعدها نجران والرياض. ثانياً، صار إنذار في 45 يوم من 71، يعني أغلب الأيام، بس فيه فترة هدوء أسبوعين في أكتوبر. ثالثاً، الليل أكثر فترة: 32% من الإنذارات بين 12 و6 الفجر. رابعاً، الخطر يزول عادة خلال 7 دقائق، ونجران أسرع منطقة بـ 5 دقائق، والشرقية أبطأها بعشر دقائق ونص.">
+    <div class="kicker rv">وش اكتشفنا</div>
+    <h2 class="rv" style="--d:80">أربع أشياء تعلمناها من البيانات</h2>
+    <div class="fgrid">
+      <div class="card hud f rv" style="--d:200"><h3><em>عسير</em> لحالها <span class="n" id="f-top"></span> من الإنذارات</h3><div class="s">عدد الإنذارات في كل منطقة</div><div class="bars" id="f-reg"></div></div>
+      <div class="card hud f rv" style="--d:320"><h3>إنذار في <em class="n" id="f-days"></em> يوم من <span class="n" id="f-tot"></span></h3><div class="s">كل مربع يوم، والأحمر يوم صار فيه إنذار (من 1 سبتمبر)</div><div class="cal" id="f-cal"></div></div>
+      <div class="card hud f rv" style="--d:440"><h3><em class="n" id="f-night"></em> من الإنذارات <em>بالليل</em></h3><div class="s">توزيع الإنذارات على فترات اليوم</div><div class="per" id="f-per"></div></div>
+      <div class="card hud f rv" style="--d:560"><h3>الخطر يزول عادة خلال <em class="n" id="f-med"></em> دقائق</h3><div class="s">وسيط مدة الإنذار في كل منطقة (بالدقائق)</div><div class="bars" id="f-dur"></div></div>
+    </div>
+  </section>
+
+  <!-- 7. replay -->
+  <section class="slide" id="s-replay" data-bg="off" data-sec="وش اكتشفنا" data-title="إعادة تشغيل الإنذارات" data-time="02:50–03:20"
+    data-notes="هنا كل الإنذارات تتشغل بترتيبها الزمني على الخريطة: كل نبضة إنذار حقيقي. لاحظوا كيف الجنوب، عسير ونجران وجازان، هو الأكثر، وكيف تجي الإنذارات على شكل موجات. تقدرون تضغطون على أي يوم تحت وتنتقلون له.">
+    <div class="kicker rv">إعادة تشغيل</div>
+    <div class="rp">
+      <div class="side rv" style="--d:150">
+        <div><div class="date" id="rp-d"></div><div class="sub"><span id="rp-day"></span> · <span class="n" id="rp-t"></span></div></div>
+        <div class="card cnt"><b class="n" id="rp-c">0</b><span>إنذار لين الحين</span></div>
+        <div class="race" id="rp-race"></div>
+        <div class="ctl"><button class="btn" id="rp-pp">إيقاف</button><button class="btn" id="rp-rs">من البداية</button></div>
+      </div>
+      <div class="mapbox rv" style="--d:250"><svg id="rp-svg"></svg><div class="hist" id="rp-hist"><div class="ph" id="rp-ph"></div></div></div>
+    </div>
+  </section>
+
+  <!-- 8. solution -->
+  <section class="slide" id="s-sol" data-bg="dim" data-sec="الحل" data-title="الحل" data-time="03:20–03:55"
+    data-notes="سابقينك يجاوب على الأسئلة الثلاث لكل منطقة: الأول خطر الغد، وهو احتمال إنذار واحد على الأقل، يطلع من موديل Random Forest. الثاني الوقت الأرجح من موديل Logistic Regression. والثالث المدة المعتادة لزوال الخطر، وهذي إحصاء: وسيط مدة الإنذارات السابقة. المثال اللي قدامكم حقيقي من التطبيق: الرياض لبكرة 11 نوفمبر.">
+    <div class="kicker rv">الحل</div>
+    <h2 class="rv" style="--d:80">سابقينك يجاوب على <em>الأسئلة الثلاث</em></h2>
+    <div class="sol">
+      <div class="card hud out rv" style="--d:250"><span class="q">هل بيجي منطقتي إنذار بكرة؟</span><h3>خطر الغد</h3><svg id="g1" width="300" height="300" viewBox="0 0 270 270"></svg><span class="m">موديل Random Forest</span></div>
+      <div class="card hud out rv" style="--d:400"><span class="q">لو صار، في أي وقت؟</span><h3>الوقت الأرجح</h3><svg id="g2" width="300" height="300" viewBox="0 0 270 270"></svg><span class="m">موديل Logistic Regression</span></div>
+      <div class="card hud out rv" style="--d:550"><span class="q">كم ياخذ لين يزول؟</span><h3>مدة زوال الخطر</h3><svg id="g3" width="300" height="300" viewBox="0 0 270 270"></svg><span class="m">إحصاء: الوسيط</span></div>
+    </div>
+    <div class="ex rv" style="--d:800">مثال حقيقي من التطبيق: الرياض، توقعات 11 نوفمبر 2026 (مع دراسة حضورية)</div>
+  </section>
+
+  <!-- 9. models -->
+  <section class="slide" id="s-mod" data-bg="dim" data-sec="الموديلات والنتائج" data-title="الموديلات" data-time="03:55–04:40"
+    data-notes="بنينا جدولين: الأول صف لكل منطقة في كل يوم، والسؤال: فيه إنذار بكرة؟ والثاني صف لكل إنذار، والسؤال: في أي فترة صار؟ كل الميزات محسوبة من الماضي بس، ما فيه أي معلومة من المستقبل. وقسمنا البيانات حسب الوقت: دربنا على الأسابيع الأولى واختبرنا على آخر ثلاث أسابيع ما شافها الموديل. قارنا ثلاث موديلات مع قاعدة بسيطة، واخترنا الأفضل بالـ cross-validation.">
+    <div class="kicker rv">الموديلات</div>
+    <h2 class="rv" style="--d:80">موديلين، وكل ميزة من <em>الماضي</em> بس</h2>
+    <div class="mods">
+      <div class="card hud mod rv" style="--d:250"><div class="tp"><h3>خطر الغد</h3><span class="alg">Random Forest</span></div>
+        <div class="y">صف لكل منطقة في كل يوم · السؤال: هل فيه إنذار بكرة؟ (نعم / لا)</div>
+        <ul><li>إنذارات المنطقة اليوم، وآخر 3 أيام، وآخر 7 أيام</li><li>كم يوم مر من آخر إنذار في المنطقة</li><li>متوسط مدة إنذارات المنطقة آخر 7 أيام</li><li>هل بكرة إجازة نهاية الأسبوع</li><li>المنطقة</li></ul>
+        <div class="hp">500 trees · max_depth 3 · min_samples_leaf 10</div></div>
+      <div class="card hud mod rv" style="--d:400"><div class="tp"><h3>الوقت الأرجح</h3><span class="alg">Logistic Regression</span></div>
+        <div class="y">صف لكل إنذار · السؤال: في أي فترة؟ (ليل، صباح، ظهر وعصر، مساء)</div>
+        <ul><li>المنطقة، وهل اليوم إجازة نهاية الأسبوع</li><li>الدراسة الحضورية <em>ميزة اصطناعية</em></li><li>فترة آخر إنذار في المنطقة</li><li>الأيام من آخر إنذار، وإنذارات آخر 7 أيام</li></ul>
+        <div class="hp">C = 0.01 · class_weight balanced</div></div>
+    </div>
+    <div class="card split rv" style="--d:600"><p>قسمنا حسب <b>الوقت</b> مو عشوائياً: ندرب على الماضي ونختبر على أسابيع ما شافها الموديل. وقارنا <b>3 موديلات</b> مع قاعدة بسيطة:<br><span dir="ltr">Logistic Regression · Random Forest · Gradient Boosting</span></p>
+      <div class="tl"><div class="tr">تدريب · من 1 سبتمبر لين 19 أكتوبر</div><div class="te">اختبار · 20 أكتوبر – 9 نوفمبر</div></div></div>
+  </section>
+
+  <!-- 10. results -->
+  <section class="slide" id="s-res" data-bg="dim" data-sec="الموديلات والنتائج" data-title="النتائج" data-time="04:40–05:30"
+    data-notes="النتائج على أسابيع الاختبار: موديل خطر الغد يلقط 78% من أيام الهجمات، والقاعدة البسيطة (صار اليوم يعني بيصير بكرة) تلقط 37% بس، يعني تقريباً الضعف. الثمن إن فيه تنبيهات زايدة: الـ precision 33%، واخترنا كذا لأن تفويت يوم فيه خطر أسوأ من تنبيه زايد. موديل الوقت دقته 41% مقابل 22% للقاعدة، وفيه أربع فترات يعني التخمين العشوائي 25%. وبكل شفافية: ميزة الدراسة الحضورية اصطناعية، وافق عليها المدرب، وبدونها الدقة تنزل لـ 26%.">
+    <div class="kicker rv">النتائج</div>
+    <h2 class="rv" style="--d:80">على أسابيع الاختبار، مقارنة بـ <em>قاعدة بسيطة</em></h2>
+    <div class="resg">
+      <div class="card hud rc rv" style="--d:250"><h3>خطر الغد</h3><div class="cap">يلقط <b class="n">78%</b> من أيام الهجمات، تقريباً ضعف القاعدة البسيطة</div><div id="r1"></div></div>
+      <div class="card hud rc rv" style="--d:400"><h3>الوقت الأرجح</h3><div class="cap">دقته <b class="n">41%</b> مقابل <span class="n">22%</span> للقاعدة البسيطة</div><div id="r2"></div>
+        <div class="trans">ميزة <b>الدراسة الحضورية</b> اصطناعية، بموافقة المدرب. بدونها: Accuracy <b class="n" id="ns-a"></b> و Macro F1 <b class="n" id="ns-f"></b></div></div>
+    </div>
+  </section>
+
+  <!-- 11. demo -->
+  <section class="slide" id="s-demo" data-bg="off" data-sec="عرض حي" data-title="عرض حي" data-time="05:30–06:30"
+    data-notes="الحين نفتح التطبيق مباشرة: 1) نختار منطقة ونشوف شريط الخطر والعدادات الثلاثة. 2) نغير سؤال الدراسة الحضورية ونشوف كيف يتغير الوقت الأرجح. 3) نفتح كل المناطق على الخريطة. 4) نشغل إعادة الإنذارات. لو النت أو التطبيق تعطل، المقاطع اللي هنا احتياط.">
+    <div class="kicker rv">عرض حي</div>
+    <div class="dm">
+      <div>
+        <h2 class="rv" style="--d:80">نجربه <em>مباشرة</em></h2>
+        <div class="dl">
+          <div class="rv" style="--d:250"><span class="n">1</span>نختار منطقة ونشوف خطر الغد</div>
+          <div class="rv" style="--d:350"><span class="n">2</span>نغير الدراسة الحضورية ونشوف الوقت يتغير</div>
+          <div class="rv" style="--d:450"><span class="n">3</span>كل المناطق على الخريطة</div>
+          <div class="rv" style="--d:550"><span class="n">4</span>إعادة تشغيل كل الإنذارات</div>
+        </div>
+        <div class="card app rv" style="--d:700" id="app"></div>
+      </div>
+      <div class="card hud vid rv" style="--d:300">
+        <div class="tabs" id="vt"></div>
+        <video id="vv" muted loop playsinline preload="metadata"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. limits -->
+  <section class="slide" id="s-lim" data-bg="dim" data-sec="القيود والخطوات الجاية" data-title="القيود والخطوات الجاية" data-time="06:30–06:50"
+    data-notes="نقولها بصراحة: البيانات 71 يوم بس، وموديل خطر الغد يعطي تنبيهات زايدة كثيرة، وأنماط الهجمات تتغير مع الوقت. الخطوة الجاية: نجمع البيانات تلقائياً ونعيد التدريب بشكل دوري، ونضيف مصادر بيانات ثانية.">
+    <div class="kicker rv">القيود والخطوات الجاية</div>
+    <h2 class="rv" style="--d:80">وين نوقف، ووين نروح بعدها</h2>
+    <div class="lf">
+      <div class="card hud rv" style="--d:250"><h3>القيود</h3><ul>
+        <li>البيانات 71 يوم بس (190 إنذار)</li><li>خطر الغد يعطي تنبيهات زايدة كثيرة (Precision 33%)</li>
+        <li>أنماط الهجمات تتغير مع الوقت</li><li>ميزة الدراسة الحضورية اصطناعية، وتحتاج بيانات حقيقية</li></ul></div>
+      <div class="card hud fut rv" style="--d:400"><h3>الخطوات الجاية</h3><ul>
+        <li>جمع التغريدات تلقائياً بدل الجمع اليدوي</li><li>إعادة تدريب الموديلات بشكل دوري</li>
+        <li>بيانات حقيقية للدراسة الحضورية من الجهات الرسمية</li><li>مصادر بيانات إضافية تحسن الدقة</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 13. closing -->
+  <section class="slide" id="s-end" data-bg="dim" data-sec="" data-title="الختام" data-time="06:50–07:00"
+    data-notes="اختموا: هذا سابقينك. شكراً لكم، ونسعد بأسئلتكم.">
+    <div class="c">
+      <div class="rv"><h1>سابقينك</h1></div>
+      <div class="ty rv" style="--d:200">شكراً لكم</div>
+      <div class="qa rv" style="--d:350">نسعد بأسئلتكم</div>
+      <div class="names rv" style="--d:500"><b>شادن</b>·<b>نوره</b>·<b>الجوهرة</b>·<b>سليمان</b></div>
+    </div>
+  </section>
+</div></div>
+
+<div id="notes"><div class="hd"><b id="n-title"></b><span class="tm" id="n-time"></span><span id="n-idx"></span><span class="clk" id="n-clk">00:00</span></div><p id="n-text"></p><div class="nx" id="n-next"></div></div>
+
+<script>
+// ---------------------------------------------------------------- settings
+const APP_URL = "";   // put the deployed Streamlit link here, e.g. "https://sabeqeenak.streamlit.app"
+const D = window.SBQ;
+const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
+function el(t, a, p){ const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+const ease = t => 1 - Math.pow(1 - t, 3);
+function countUp(node, to, dec = 0, ms = 1500, delay = 0, suffix = ''){
+  const t0 = performance.now() + delay;
+  (function f(t){ const k = Math.min(1, Math.max(0, (t - t0) / ms)); node.textContent = (to * ease(k)).toFixed(dec) + suffix; if (k < 1) requestAnimationFrame(f); })(t0);
+}
+
+// ---------------------------------------------------------------- stage scaling
+const stage = $('stage');
+function fit(){ const s = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = `scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+// ---------------------------------------------------------------- background: radar map of Saudi Arabia (dot field)
+const cv = $('bg'), cx = cv.getContext('2d');
+const K = Math.cos(24 * Math.PI / 180), LON0 = 34.3, LON1 = 56, LAT0 = 16, LAT1 = 32.5;
+const BW = (LON1 - LON0) * K, BH = LAT1 - LAT0;
+function inPoly(x, y, poly){ let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++){ const [xi, yi] = poly[i], [xj, yj] = poly[j];
+  if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
+const dots = [];
+for (let lat = LAT0; lat <= LAT1; lat += 0.26) for (let lon = LON0; lon <= LON1; lon += 0.26 / K)
+  if (inPoly(lon, lat, D.outline)) dots.push({u: (lon - LON0) * K / BW, v: (LAT1 - lat) / BH, tw: Math.random() * 6.28});
+const regPts = D.regions.map(r => ({u: (r.lon - LON0) * K / BW, v: (LAT1 - r.lat) / BH, w: r.count}));
+const POSES = { hook: {x: 470, y: 560, s: 860, a: .5}, left: {x: 480, y: 590, s: 780, a: .85}, dim: {x: 960, y: 600, s: 1000, a: .22},
+                off: {x: 960, y: 600, s: 1000, a: 0} };
+const view = {x: 470, y: 560, s: 860, a: .9}; let target = POSES.hook;
+const pulses = []; let lastPulse = 0, sweep = 0;
+const totalW = regPts.reduce((s, r) => s + r.w, 0);
+function frame(t){
+  for (const k of ['x', 'y', 's', 'a']) view[k] += (target[k] - view[k]) * 0.05;
+  cx.clearRect(0, 0, 1920, 1080);
+  if (view.a > 0.01){
+    const W = view.s, H = view.s * BH / BW, ox = view.x - W / 2, oy = view.y - H / 2;
+    const P = (u, v) => [ox + u * W, oy + v * H];
+    sweep = (t / 1000 * 0.9) % (Math.PI * 2);
+    const [rx, ry] = P(0.55, 0.52);
+    // outline
+    cx.globalAlpha = view.a * .55; cx.strokeStyle = '#5A5D6B'; cx.lineWidth = 1.5; cx.beginPath();
+    D.outline.forEach(([lon, lat], i) => { const [x, y] = P((lon - LON0) * K / BW, (LAT1 - lat) / BH); i ? cx.lineTo(x, y) : cx.moveTo(x, y); });
+    cx.closePath(); cx.stroke();
+    // dots, brighter right behind the radar sweep
+    for (const d of dots){
+      const [x, y] = P(d.u, d.v); let ang = Math.atan2(y - ry, x - rx); let diff = (sweep - ang + Math.PI * 4) % (Math.PI * 2);
+      const glow = diff < 0.9 ? (1 - diff / 0.9) : 0;
+      cx.globalAlpha = view.a * (0.16 + 0.08 * Math.sin(t / 900 + d.tw) + glow * 0.6);
+      cx.fillStyle = glow > 0.05 ? '#FF2D55' : '#9FA1AC';
+      cx.fillRect(x - 1.4, y - 1.4, 2.8, 2.8);
+    }
+    // alert pulses, more often where alerts were more frequent
+    if (t - lastPulse > 650){ lastPulse = t; let r = Math.random() * totalW; let i = 0; while ((r -= regPts[i].w) > 0) i++; pulses.push({i, t0: t}); }
+    for (let k = pulses.length - 1; k >= 0; k--){
+      const p = pulses[k], age = (t - p.t0) / 2200; if (age > 1){ pulses.splice(k, 1); continue; }
+      const [x, y] = P(regPts[p.i].u, regPts[p.i].v);
+      cx.globalAlpha = view.a * (1 - age); cx.strokeStyle = '#FF2D55'; cx.lineWidth = 2.5;
+      cx.beginPath(); cx.arc(x, y, 6 + age * 46, 0, 7); cx.stroke();
+    }
+    for (const r of regPts){ const [x, y] = P(r.u, r.v); cx.globalAlpha = view.a; cx.fillStyle = '#FF2D55'; cx.beginPath(); cx.arc(x, y, 4.5, 0, 7); cx.fill(); }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ---------------------------------------------------------------- navigation
+const slides = [...document.querySelectorAll('.slide')]; let cur = -1;
+$('tot').textContent = String(slides.length).padStart(2, '0');
+const hooks = {};
+function go(i, push = true){
+  i = Math.max(0, Math.min(slides.length - 1, i)); if (i === cur) return;
+  const prev = slides[cur]; if (prev){ prev.classList.remove('active'); hooks[prev.id + ':leave'] && hooks[prev.id + ':leave'](); }
+  cur = i; const s = slides[i]; void s.offsetWidth; s.classList.add('active');
+  target = POSES[s.dataset.bg] || POSES.dim;
+  $('cur').textContent = String(i + 1).padStart(2, '0'); $('sec').textContent = s.dataset.sec || '';
+  $('sec').style.display = s.dataset.sec ? '' : 'none';
+  $('prog').firstElementChild.style.width = (i / (slides.length - 1) * 100) + '%';
+  const w = $('wipe'); w.classList.remove('go'); void w.offsetWidth; w.classList.add('go');
+  hooks[s.id] && hooks[s.id]();
+  if (push) history.replaceState(null, '', '#' + (i + 1));
+  renderNotes();
+}
+function startTimer(){ if (!window._t0) window._t0 = Date.now(); }
+addEventListener('keydown', e => {
+  if (['ArrowLeft', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)){ e.preventDefault(); startTimer(); go(cur + 1); }
+  else if (['ArrowRight', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)){ e.preventDefault(); go(cur - 1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F'){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+  else if (e.key === 'n' || e.key === 'N'){ $('notes').classList.toggle('on'); startTimer(); }
+  else if (e.key === 't' || e.key === 'T'){ window._t0 = Date.now(); }
+});
+$('deck').addEventListener('click', e => {
+  if (e.target.closest('button,a,video,.toc li,.hist,#notes')) return;
+  startTimer(); const r = innerWidth; go(e.clientX < r * 0.25 ? cur + 1 : e.clientX > r * 0.75 ? cur - 1 : cur + 1);
+});
+document.querySelectorAll('[data-go]').forEach(li => li.addEventListener('click', () => go(slides.findIndex(s => s.id === li.dataset.go))));
+let tsX = null; addEventListener('touchstart', e => tsX = e.touches[0].clientX, {passive: true});
+addEventListener('touchend', e => { if (tsX === null) return; const dx = e.changedTouches[0].clientX - tsX; if (Math.abs(dx) > 50) go(cur + (dx > 0 ? 1 : -1)); tsX = null; });
+setTimeout(() => $('hint').style.opacity = 0, 6000);
+
+// ---------------------------------------------------------------- presenter notes
+function renderNotes(){
+  const s = slides[cur], n = slides[cur + 1];
+  $('n-title').textContent = s.dataset.title; $('n-time').textContent = s.dataset.time || '';
+  $('n-idx').textContent = (cur + 1) + ' / ' + slides.length; $('n-text').textContent = s.dataset.notes || '';
+  $('n-next').textContent = n ? 'التالي: ' + n.dataset.title : 'آخر شريحة';
+}
+setInterval(() => { if (!window._t0) return; const s = Math.floor((Date.now() - window._t0) / 1000);
+  $('n-clk').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }, 500);
+
+// ---------------------------------------------------------------- 1. phone that receives an alert
+const ph = $('ph'), nt = $('nt'), rg = $('rg');
+function tick(){ const d = new Date(); $('clk').textContent = d.toTimeString().slice(0, 5);
+  $('pd').textContent = d.toLocaleDateString('ar-u-ca-gregory-nu-latn', {weekday: 'long', day: 'numeric', month: 'long'}); }
+tick(); setInterval(tick, 10000);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+(async function loop(){ let k = 0; await wait(1500);
+  while (true){ const R = D.regions[k++ % 6];
+    nt.className = 'nt'; $('np').style.transition = 'none'; $('np').style.width = '0';
+    $('nh').textContent = 'إنذار مبكر'; $('nb').textContent = R.name + ': ابقَ في مكان آمن لين يُعلن زوال الخطر.';
+    $('ne').textContent = 'عادةً يزول خلال ~' + R.median + ' دقيقة';
+    ph.classList.remove('okay'); void ph.offsetWidth; ph.classList.add('alert', 'buzz'); rg.classList.remove('go'); void rg.offsetWidth; rg.classList.add('go');
+    await wait(250); nt.classList.add('show'); await wait(400);
+    $('np').style.transition = 'width 3.6s linear'; $('np').style.width = '100%'; await wait(3900);
+    ph.classList.remove('alert', 'buzz'); nt.classList.remove('show'); await wait(450);
+    nt.classList.add('ok'); $('nh').textContent = 'زال الخطر'; $('nb').textContent = R.name + ': انتهى الإنذار.'; $('ne').textContent = '';
+    $('np').style.transition = 'none'; $('np').style.width = '0'; ph.classList.add('okay'); nt.classList.add('show'); await wait(2600);
+    nt.classList.remove('show'); ph.classList.remove('okay'); await wait(1400); } })();
+$('hk-n').textContent = D.alerts;
+
+// ---------------------------------------------------------------- 5. data counters
+hooks['s-data'] = () => document.querySelectorAll('#s-data .cnt').forEach((n, i) => countUp(n, D[n.dataset.k], 0, 1400, 300 + i * 90));
+
+// ---------------------------------------------------------------- 6. findings
+(function(){
+  const top = D.regions[0]; $('f-top').textContent = Math.round(top.share) + '%';
+  $('f-days').textContent = D.alert_days; $('f-tot').textContent = D.days; $('f-night').textContent = Math.round(D.period_share.Night) + '%';
+  $('f-med').textContent = D.median_all;
+  const mx = top.count;
+  $('f-reg').innerHTML = D.regions.map((r, i) => `<div class="br ${i ? '' : 'top'}"><span>${r.name}</span><span class="tr"><i data-w="${r.count / mx * 100}"></i></span><b>${r.count}</b></div>`).join('');
+  const byDur = [...D.regions].sort((a, b) => a.median - b.median), mxd = byDur[byDur.length - 1].median;
+  $('f-dur').innerHTML = byDur.map(r => `<div class="br"><span>${r.name}</span><span class="tr"><i data-w="${r.median / mxd * 100}"></i></span><b>${r.median}</b></div>`).join('');
+  $('f-cal').innerHTML = D.daily.map(v => `<i data-v="${v}"></i>`).join('');
+  const PER = [['Night', 'الليل', '00–06', '#7B6CF6'], ['Morning', 'الصباح', '06–12', '#FFC233'], ['Afternoon', 'الظهر والعصر', '12–18', '#FF8A3D'], ['Evening', 'المساء', '18–24', '#E8590C']];
+  const mp = Math.max(...PER.map(p => D.period_share[p[0]]));
+  $('f-per').innerHTML = PER.map(([k, n, h, c]) => `<div class="pc"><span class="v">${Math.round(D.period_share[k])}%</span><span class="bx" data-h="${D.period_share[k] / mp * 82}" style="background:linear-gradient(180deg,${c},${c}88)${k === 'Night' ? ';box-shadow:0 0 22px ' + c : ''}"></span><span class="l">${n}<small>${h}</small></span></div>`).join('');
+})();
+hooks['s-eda'] = () => {
+  document.querySelectorAll('#s-eda .br i').forEach(i => { i.style.width = 0; setTimeout(() => i.style.width = i.dataset.w + '%', 500); });
+  document.querySelectorAll('#s-eda .pc .bx').forEach(b => { b.style.height = 0; setTimeout(() => b.style.height = b.dataset.h + '%', 650); });
+  document.querySelectorAll('#f-cal i').forEach((c, i) => { c.className = ''; const v = +c.dataset.v; if (v) setTimeout(() => c.className = 'on' + (v >= 10 ? ' h3' : v >= 5 ? ' h2' : ''), 600 + i * 18); });
+};
+
+// ---------------------------------------------------------------- 7. replay every alert on the map
+const RP = {cur: 0, run: false, idx: 0, counts: [], dots: [], rows: [], built: false, last: 0, raf: 0};
+const RP_END = D.days * 1440, RP_SPEED = RP_END / 24;     // whole period in about 24 seconds
+function rpBuild(){
+  const svg = $('rp-svg'), box = svg.getBoundingClientRect(), W = 1090, H = 690;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const sc = Math.min((W - 80) / BW, (H - 60) / BH), ox = (W - BW * sc) / 2, oy = (H - BH * sc) / 2 - 20;
+  const P = (lon, lat) => [ox + (lon - LON0) * K * sc, oy + (LAT1 - lat) * sc];
+  el('path', {d: D.outline.map((q, i) => (i ? 'L' : 'M') + P(q[0], q[1]).map(v => v.toFixed(1)).join(' ')).join(' ') + 'Z', class: 'land'}, svg);
+  D.regions.forEach((r, i) => { const [x, y] = P(r.lon, r.lat); const g = el('g', {}, svg);
+    RP.dots[i] = {g, x, y, c: el('circle', {cx: x, cy: y, r: 7, class: 'rdot'}, g)};
+    const t = el('text', {x: r.side === 'l' ? x - 14 : x + 14, y: y + 6 + r.dy, class: 'rlb', 'text-anchor': r.side === 'l' ? 'end' : 'start'}, svg); t.textContent = r.name; });
+  D.regions.forEach((r, i) => { const d = document.createElement('div'); d.className = 'row'; d.innerHTML = `<span>${r.name}</span><span class="t"><i></i></span><b>0</b>`; $('rp-race').appendChild(d); RP.rows[i] = d; });
+  const mx = Math.max(...D.daily);
+  RP.bars = D.daily.map(v => { const b = document.createElement('i'); b.style.height = (v / mx * 100) + '%'; $('rp-hist').insertBefore(b, $('rp-ph')); return b; });
+  $('rp-hist').addEventListener('click', e => { const r = $('rp-hist').getBoundingClientRect(); rpSeek(Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * RP_END); });
+  $('rp-pp').onclick = () => { if (RP.cur >= RP_END) rpSeek(0); RP.run = !RP.run; $('rp-pp').textContent = RP.run ? 'إيقاف' : 'تشغيل'; };
+  $('rp-rs').onclick = () => { rpSeek(0); RP.run = true; $('rp-pp').textContent = 'إيقاف'; };
+  RP.built = true;
+}
+function rpRace(hit){ const mx = Math.max(1, ...RP.counts); RP.counts.map((c, i) => [c, i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).forEach(([c, i], rank) => {
+  RP.rows[i].style.top = (rank * 37) + 'px'; RP.rows[i].querySelector('i').style.width = (c / mx * 100) + '%'; RP.rows[i].querySelector('b').textContent = c; RP.rows[i].classList.toggle('hit', i === hit); }); }
+function rpPulse(i){ const d = RP.dots[i];
+  const c = el('circle', {cx: d.x, cy: d.y, r: 11, fill: 'none', stroke: '#FF2D55', 'stroke-width': 3, class: 'rpl'}, d.g); setTimeout(() => c.remove(), 1900);
+  const f = el('circle', {cx: d.x, cy: d.y, r: 15, fill: 'rgba(255,45,85,.35)', class: 'rpl'}, d.g); setTimeout(() => f.remove(), 1900);
+  d.c.style.fill = '#FF2D55'; clearTimeout(d.to); d.to = setTimeout(() => d.c.style.fill = '', 900); }
+const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+function rpHud(){ const t = new Date(new Date(D.start + 'T00:00:00').getTime() + RP.cur * 60000), day = Math.min(D.days, Math.floor(RP.cur / 1440) + 1);
+  $('rp-d').textContent = t.getDate() + ' ' + MONTHS[t.getMonth()] + ' ' + t.getFullYear();
+  $('rp-day').textContent = 'اليوم ' + day + ' من ' + D.days; $('rp-t').textContent = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
+  $('rp-c').textContent = RP.idx; $('rp-ph').style.left = (Math.min(1, RP.cur / RP_END) * 100) + '%'; RP.bars.forEach((b, i) => b.classList.toggle('p', i < day)); }
+function rpSeek(m){ RP.cur = m; RP.idx = 0; RP.counts = D.regions.map(() => 0);
+  while (RP.idx < D.events.length && D.events[RP.idx][0] <= m){ RP.counts[D.events[RP.idx][1]]++; RP.idx++; } rpRace(-1); rpHud(); }
+function rpLoop(t){ const dt = Math.min(.1, (t - RP.last) / 1000); RP.last = t;
+  if (RP.run){ RP.cur += dt * RP_SPEED; let hit = -1;
+    while (RP.idx < D.events.length && D.events[RP.idx][0] <= RP.cur){ const e = D.events[RP.idx]; RP.counts[e[1]]++; rpPulse(e[1]); hit = e[1]; RP.idx++; }
+    if (hit >= 0) rpRace(hit); if (RP.cur >= RP_END){ RP.cur = RP_END; RP.run = false; $('rp-pp').textContent = 'تشغيل'; } rpHud(); }
+  RP.raf = requestAnimationFrame(rpLoop); }
+hooks['s-replay'] = () => { if (!RP.built) rpBuild(); rpSeek(0); RP.run = true; $('rp-pp').textContent = 'إيقاف'; RP.last = performance.now(); cancelAnimationFrame(RP.raf); setTimeout(() => { RP.last = performance.now(); RP.raf = requestAnimationFrame(rpLoop); }, 900); };
+hooks['s-replay:leave'] = () => { RP.run = false; cancelAnimationFrame(RP.raf); };
+
+// ---------------------------------------------------------------- 8. three instruments (same style as the app)
+const IC = 135, ST = -120, SW = 240;
+const AP = (a, r) => [IC + r * Math.sin(a * Math.PI / 180), IC - r * Math.cos(a * Math.PI / 180)];
+const arc = (r, a0, a1) => { const [x0, y0] = AP(a0, r), [x1, y1] = AP(a1, r); return `M${x0} ${y0} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}`; };
+function gdefs(svg, id, stops){ const d = el('defs', {}, svg), g = el('linearGradient', {id, x1: 0, y1: 1, x2: 1, y2: 0}, d); stops.forEach(([o, c]) => el('stop', {offset: o, 'stop-color': c}, g)); }
+function ticks(svg, n, labels){ for (let i = 0; i <= n; i++){ const a = ST + SW * i / n, big = i % (n / (labels.length - 1)) === 0, [x0, y0] = AP(a, 120), [x1, y1] = AP(a, big ? 132 : 127);
+  el('line', {x1: x0, y1: y0, x2: x1, y2: y1, stroke: big ? '#6B6E7B' : '#3A3C47', 'stroke-width': big ? 2 : 1}, svg); }
+  labels.forEach((t, i) => { const [x, y] = AP(ST + SW * i / (labels.length - 1), 147); const e = el('text', {x, y: y + 5, 'text-anchor': 'middle', fill: '#777984', 'font-size': 13, 'font-family': 'Inter'}, svg); e.textContent = t; }); }
+function fillArc(svg, frac, grad){ const len = 2 * Math.PI * 104 * SW / 360, d = arc(104, ST, ST + SW);
+  el('path', {d, fill: 'none', stroke: '#24262F', 'stroke-width': 18, 'stroke-linecap': 'round'}, svg);
+  const p = el('path', {d, fill: 'none', stroke: `url(#${grad})`, 'stroke-width': 12, 'stroke-linecap': 'round', 'stroke-dasharray': len, 'stroke-dashoffset': len, style: 'transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.3,1);filter:drop-shadow(0 0 8px rgba(255,45,85,.6))'}, svg);
+  return () => { p.setAttribute('stroke-dashoffset', len); setTimeout(() => p.setAttribute('stroke-dashoffset', len * (1 - frac)), 450); }; }
+function bigText(svg, y, size){ return el('text', {x: IC, y, 'text-anchor': 'middle', fill: '#fff', 'font-size': size, 'font-weight': 900, 'font-family': 'Inter'}, svg); }
+const EX = {p: 0.70, clear: 9.5, period: [['الليل', .22, '#7B6CF6'], ['الصباح', .33, '#FFC233'], ['الظهر والعصر', .27, '#FF8A3D'], ['المساء', .18, '#E8590C']], hot: 1};
+const solInit = [];
+(function(){
+  const g1 = $('g1'); gdefs(g1, 'gr', [[0, '#40C057'], [.5, '#FFC233'], [1, '#FF2D55']]); ticks(g1, 20, ['0', '25', '50', '75', '100']);
+  const f1 = fillArc(g1, EX.p, 'gr'); const t1 = bigText(g1, 150, 70); const l1 = el('text', {x: IC, y: 190, 'text-anchor': 'middle', fill: '#FF8FA3', 'font-size': 22, 'font-weight': 800}, g1); l1.textContent = 'مرتفع';
+  solInit.push(() => { f1(); countUp(t1, EX.p * 100, 0, 1500, 450, '%'); });
+  const g2 = $('g2');
+  for (let h = 0; h < 24; h++){ const [x0, y0] = AP(h * 15, 121), [x1, y1] = AP(h * 15, h % 6 ? 127 : 133); el('line', {x1: x0, y1: y0, x2: x1, y2: y1, stroke: h % 6 ? '#3A3C47' : '#6B6E7B', 'stroke-width': h % 6 ? 1 : 2}, g2); }
+  [0, 6, 12, 18].forEach(h => { const [x, y] = AP(h * 15, 147); const e = el('text', {x, y: y + 5, 'text-anchor': 'middle', fill: '#777984', 'font-size': 13, 'font-family': 'Inter'}, g2); e.textContent = String(h).padStart(2, '0'); });
+  const segs = EX.period.map(([n, p, c], i) => { const a0 = i * 90 + 3, a1 = i * 90 + 87; el('path', {d: arc(104, a0, a1), fill: 'none', stroke: '#24262F', 'stroke-width': 18}, g2);
+    const s = el('path', {d: arc(104, a0, a1), fill: 'none', stroke: c, 'stroke-width': i === EX.hot ? 18 : 12, opacity: 0, style: 'transition:opacity .8s' + (i === EX.hot ? ';filter:drop-shadow(0 0 10px ' + c + ')' : '')}, g2);
+    const [tx, ty] = AP((a0 + a1) / 2, 104); const pt = el('text', {x: tx, y: ty + 5, 'text-anchor': 'middle', fill: '#fff', 'font-size': 14, 'font-weight': 800, 'font-family': 'Inter', style: 'paint-order:stroke;stroke:rgba(0,0,0,.6);stroke-width:3px'}, g2); pt.textContent = Math.round(p * 100) + '%';
+    return [s, i === EX.hot ? 1 : .25 + .4 * p / .33]; });
+  const hand = el('g', {style: `transform-origin:${IC}px ${IC}px;transition:transform 1.6s cubic-bezier(.25,1.3,.4,1);transform:rotate(0deg)`}, g2);
+  el('path', {d: `M${IC - 7} ${IC - 66} L${IC} ${IC - 90} L${IC + 7} ${IC - 66} Z`, fill: '#FF2D55', style: 'filter:drop-shadow(0 0 8px #FF2D55)'}, hand);
+  const pn = el('text', {x: IC, y: 146, 'text-anchor': 'middle', fill: '#fff', 'font-size': 38, 'font-weight': 900, 'font-family': 'Cairo'}, g2); pn.textContent = EX.period[EX.hot][0];
+  const hr = el('text', {x: IC, y: 176, 'text-anchor': 'middle', fill: '#9FA1AC', 'font-size': 15, 'font-family': 'Inter'}, g2); hr.textContent = '\u202A06:00 – 11:59\u202C';
+  solInit.push(() => { segs.forEach(([s]) => s.setAttribute('opacity', 0)); hand.style.transform = 'rotate(0deg)';
+    setTimeout(() => { segs.forEach(([s, o], i) => setTimeout(() => s.setAttribute('opacity', o), i * 120)); hand.style.transform = `rotate(${EX.hot * 90 + 45}deg)`; }, 450); });
+  const g3 = $('g3'); gdefs(g3, 'gc', [[0, '#FFC233'], [1, '#FF2D55']]); ticks(g3, 8, ["0'", "5'", "10'", "15'", "20'"]);
+  el('path', {d: arc(104, ST + SW * 7 / 20, ST + SW * 12 / 20), fill: 'none', stroke: 'rgba(255,45,85,.25)', 'stroke-width': 26}, g3);
+  const f3 = fillArc(g3, EX.clear / 20, 'gc'); const t3 = bigText(g3, 150, 70); const l3 = el('text', {x: IC, y: 186, 'text-anchor': 'middle', fill: '#9FA1AC', 'font-size': 20}, g3); l3.textContent = 'دقيقة';
+  solInit.push(() => { f3(); countUp(t3, EX.clear, 1, 1500, 450); });
+})();
+hooks['s-sol'] = () => solInit.forEach(f => f());
+
+// ---------------------------------------------------------------- 10. results
+(function(){
+  const R = D.results;
+  const block = (title, rows) => `<div class="metric"><div class="lb"><span>${title}</span></div><div class="mb">${rows}</div></div>`;
+  const pair = (name, us, base) => `<div class="us"><span>${name}</span><span class="tr"><i data-w="${us * 100}"></i></span><span class="v">${us.toFixed(2)}</span></div>
+     <div class="bl"><span>القاعدة البسيطة</span><span class="tr"><i data-w="${base * 100}"></i></span><span class="v">${base.toFixed(2)}</span></div>`;
+  $('r1').innerHTML = block('Recall: كم يوم هجوم لقطنا', pair(R.m1.model, ...R.m1.recall)) + block('F1', pair(R.m1.model, ...R.m1.f1)) + block('ROC-AUC', pair(R.m1.model, ...R.m1.auc));
+  $('r2').innerHTML = block('Accuracy', pair(R.m2.model, ...R.m2.acc)) + block('Macro F1', pair(R.m2.model, ...R.m2.f1));
+  $('ns-a').textContent = R.m2.no_school.acc.toFixed(2); $('ns-f').textContent = R.m2.no_school.f1.toFixed(2);
+})();
+hooks['s-res'] = () => document.querySelectorAll('#s-res .mb i').forEach((i, k) => { i.style.width = 0; setTimeout(() => i.style.width = i.dataset.w + '%', 500 + k * 70); });
+
+// ---------------------------------------------------------------- 11. demo videos (backup if the live app is not reachable)
+(function(){
+  const V = [['clip_hero', 'الواجهة'], ['clip_region', 'بكرة في منطقتي'], ['clip_map', 'كل المناطق'], ['clip_replay', 'إعادة التشغيل']];
+  const vv = $('vv');
+  const pick = i => { document.querySelectorAll('#vt .btn').forEach((b, k) => b.classList.toggle('on', k === i));
+    vv.poster = `a/${V[i][0]}.webp`; vv.src = `a/${V[i][0]}.webm`; if (slides[cur] && slides[cur].id === 's-demo') vv.play().catch(() => {}); };
+  V.forEach(([f, n], i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = n; b.onclick = () => pick(i); $('vt').appendChild(b); });
+  pick(1);
+  $('app').innerHTML = APP_URL ? `رابط التطبيق<a href="${APP_URL}" target="_blank" rel="noopener">${APP_URL.replace(/^https?:\/\//, '')}</a>`
+                               : `تشغيل التطبيق محلياً<code>streamlit run app_v2.py</code>`;
+})();
+hooks['s-demo'] = () => $('vv').play().catch(() => {});
+hooks['s-demo:leave'] = () => $('vv').pause();
+
+// ---------------------------------------------------------------- start
+addEventListener('hashchange', () => { const k = parseInt(location.hash.slice(1), 10); if (!isNaN(k)) go(k - 1, false); });
+const h = parseInt(location.hash.slice(1), 10);
+go(isNaN(h) ? 0 : h - 1, false);
+</script>
+</body>
+</html>
