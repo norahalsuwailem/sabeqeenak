@@ -14,7 +14,7 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:#050608;color:var(--ink);font-family:var(--txt);overflow:hidden}
-#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#050608}
+#deck{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:#050608}
 #stage{position:relative;width:1920px;height:1080px;flex:none;overflow:hidden;transform-origin:center center;direction:rtl;
   background:radial-gradient(1400px 800px at 30% 45%,#0F1A15 0%,#0F1015 45%,var(--bg) 100%)}
 #bg{position:absolute;inset:0;width:1920px;height:1080px}
@@ -312,12 +312,12 @@ body.editing .rv{opacity:1!important;animation:none!important}
 #edbar{position:fixed;left:50%;transform:translateX(-50%);top:14px;z-index:200;display:none;gap:10px;align-items:center;direction:rtl;font-family:var(--hd)}
 #edbar.show{display:flex}
 #edbar .btn{font-size:16px;padding:8px 16px;background:#13261d;border-color:#18C072;color:#EBECEF}
-#edbar .st{font-size:14px;color:#CACCD3;background:rgba(10,11,15,.92);padding:7px 12px;border-radius:8px}
+#edbar .st{white-space:nowrap;font-size:14px;color:#CACCD3;background:rgba(10,11,15,.92);padding:7px 12px;border-radius:8px}
 #edbar .st:empty{display:none}
 body.editing #notes{display:block}
 body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-radius:6px}
 /* presenter notes (outside the stage, not scaled) */
-#notes{position:fixed;left:0;right:0;bottom:0;max-height:42vh;overflow:auto;z-index:100;direction:rtl;background:rgba(10,11,15,.96);border-top:2px solid var(--red);
+#notes{position:fixed;left:0;right:0;bottom:0;max-height:30vh;overflow:auto;z-index:100;direction:rtl;background:rgba(10,11,15,.96);border-top:2px solid var(--red);
   padding:16px 28px 20px;font-family:var(--txt);display:none;box-shadow:0 -20px 50px rgba(0,0,0,.6)}
 #notes.on{display:block}
 #notes .hd{display:flex;gap:22px;align-items:center;font-family:var(--hd);font-size:18px;color:var(--mute)}
@@ -383,7 +383,7 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     data-notes="إحنا سابقينك: متنبئ مخاطر الإنذار المبكر. نعطي توقعات لكل منطقة لبكرة: هل بيصير إنذار، وفي أي وقت، وكم ياخذ لين يزول الخطر. وكل هذا مبني على 190 إنذار رسمي من الدفاع المدني.">
     <div class="wrap">
       <div>
-        <span class="chip rv" style="--d:0"><i></i>مبني على <span class="n" id="hk-n">190</span> إنذار رسمي من الدفاع المدني</span>
+        <span class="chip rv" style="--d:0"><i></i>مبني على <span class="n">190</span> إنذار رسمي من الدفاع المدني</span>
         <div class="rv" style="--d:120"><h1>سابقينك</h1></div>
         <div class="t2 rv" style="--d:240">متنبئ مخاطر الإنذار المبكر</div>
         <div class="t3 rv" style="--d:360">توقعات لكل منطقة في السعودية لبكرة: هل بيصير إنذار، وفي أي وقت، وكم ياخذ لين يزول الخطر.</div>
@@ -453,10 +453,10 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     <div class="kicker rv">وش اكتشفنا</div>
     <h2 class="rv" style="--d:80">أربع أشياء تعلمناها من البيانات</h2>
     <div class="fgrid">
-      <div class="card hud f rv" style="--d:200"><h3><em>عسير</em> لحالها <span class="n" id="f-top"></span> من الإنذارات</h3><div class="s">عدد الإنذارات في كل منطقة</div><div class="bars" id="f-reg"></div></div>
-      <div class="card hud f rv" style="--d:320"><h3>إنذار في <em class="n" id="f-days"></em> يوم من <span class="n" id="f-tot"></span></h3><div class="s">كل مربع يوم، والأحمر يوم صار فيه إنذار (من 1 سبتمبر)</div><div class="cal" id="f-cal"></div></div>
-      <div class="card hud f rv" style="--d:440"><h3><em class="n" id="f-night"></em> من الإنذارات <em>بالليل</em></h3><div class="s">توزيع الإنذارات على فترات اليوم</div><div class="per" id="f-per"></div></div>
-      <div class="card hud f rv" style="--d:560"><h3>الخطر يزول عادة خلال <em class="n" id="f-med"></em> دقائق</h3><div class="s">وسيط مدة الإنذار في كل منطقة (بالدقائق)</div><div class="bars" id="f-dur"></div></div>
+      <div class="card hud f rv" style="--d:200"><h3><em>عسير</em> لحالها <span class="n">35%</span> من الإنذارات</h3><div class="s">عدد الإنذارات في كل منطقة</div><div class="bars" id="f-reg"></div></div>
+      <div class="card hud f rv" style="--d:320"><h3>إنذار في <em class="n">45</em> يوم من <span class="n">71</span></h3><div class="s">كل مربع يوم، والأحمر يوم صار فيه إنذار (من 1 سبتمبر)</div><div class="cal" id="f-cal"></div></div>
+      <div class="card hud f rv" style="--d:440"><h3><em class="n">32%</em> من الإنذارات <em>بالليل</em></h3><div class="s">توزيع الإنذارات على فترات اليوم</div><div class="per" id="f-per"></div></div>
+      <div class="card hud f rv" style="--d:560"><h3>الخطر يزول عادة خلال <em class="n">7</em> دقائق</h3><div class="s">وسيط مدة الإنذار في كل منطقة (بالدقائق)</div><div class="bars" id="f-dur"></div></div>
     </div>
   </section>
 
@@ -515,7 +515,7 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     <div class="resg">
       <div class="card hud rc rv" style="--d:250"><h3>خطر الغد</h3><div class="cap">يلقط <b class="n">78%</b> من أيام الهجمات، تقريباً ضعف القاعدة البسيطة</div><div id="r1"></div></div>
       <div class="card hud rc rv" style="--d:400"><h3>الوقت الأرجح</h3><div class="cap">دقته <b class="n">41%</b> مقابل <span class="n">22%</span> للقاعدة البسيطة</div><div id="r2"></div>
-        <div class="trans">ميزة <b>الدراسة الحضورية</b> اصطناعية، بموافقة المدرب. بدونها: Accuracy <b class="n" id="ns-a"></b> و Macro F1 <b class="n" id="ns-f"></b></div></div>
+        <div class="trans">ميزة <b>الدراسة الحضورية</b> اصطناعية، بموافقة المدرب. بدونها: Accuracy <b class="n">0.26</b> و Macro F1 <b class="n">0.22</b></div></div>
     </div>
   </section>
 
@@ -604,8 +604,11 @@ function countUp(node, to, dec = 0, ms = 1500, delay = 0, suffix = ''){
 
 // ---------------------------------------------------------------- stage scaling
 const stage = $('stage');
-function fit(){ const s = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = `scale(${s})`; }
+function fit(){ const nt = document.getElementById('notes'), nh = nt && getComputedStyle(nt).display !== 'none' ? nt.offsetHeight : 0;
+  document.getElementById('deck').style.bottom = nh + 'px';
+  const s = Math.min(innerWidth / 1920, (innerHeight - nh) / 1080); stage.style.transform = `scale(${s})`; }
 addEventListener('resize', fit); fit();
+new ResizeObserver(() => fit()).observe(document.getElementById('notes'));
 
 // ---------------------------------------------------------------- background: radar map of Saudi Arabia (dot field)
 const cv = $('bg'), cx = cv.getContext('2d');
@@ -723,17 +726,15 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
     nt.classList.add('ok'); $('nh').textContent = 'زال الخطر'; $('nb').textContent = R.name + ': انتهى الإنذار.'; $('ne').textContent = '';
     $('np').style.transition = 'none'; $('np').style.width = '0'; ph.classList.add('okay'); nt.classList.add('show'); await wait(2600);
     nt.classList.remove('show'); ph.classList.remove('okay'); await wait(1400); } })();
-$('hk-n').textContent = D.alerts;
+
 
 // ---------------------------------------------------------------- 5. data counters
 hooks['s-data'] = () => document.querySelectorAll('#s-data .cnt').forEach((n, i) => countUp(n, D[n.dataset.k], 0, 1400, 300 + i * 90));
 
 // ---------------------------------------------------------------- 6. findings
 (function(){
-  const top = D.regions[0]; $('f-top').textContent = Math.round(top.share) + '%';
-  $('f-days').textContent = D.alert_days; $('f-tot').textContent = D.days; $('f-night').textContent = Math.round(D.period_share.Night) + '%';
-  $('f-med').textContent = D.median_all;
-  const mx = top.count;
+  const top = D.regions[0];
+    const mx = top.count;
   $('f-reg').innerHTML = D.regions.map((r, i) => `<div class="br ${i ? '' : 'top'}"><span>${r.name}</span><span class="tr"><i data-w="${r.count / mx * 100}"></i></span><b>${r.count}</b></div>`).join('');
   const byDur = [...D.regions].sort((a, b) => a.median - b.median), mxd = byDur[byDur.length - 1].median;
   $('f-dur').innerHTML = byDur.map(r => `<div class="br"><span>${r.name}</span><span class="tr"><i data-w="${r.median / mxd * 100}"></i></span><b>${r.median}</b></div>`).join('');
@@ -836,7 +837,7 @@ hooks['s-sol'] = () => solInit.forEach(f => f());
      <div class="bl"><span>القاعدة البسيطة</span><span class="tr"><i data-w="${base * 100}"></i></span><span class="v">${base.toFixed(2)}</span></div>`;
   $('r1').innerHTML = block('Recall: كم يوم هجوم لقطنا', pair(R.m1.model, ...R.m1.recall)) + block('F1', pair(R.m1.model, ...R.m1.f1)) + block('ROC-AUC', pair(R.m1.model, ...R.m1.auc));
   $('r2').innerHTML = block('Accuracy', pair(R.m2.model, ...R.m2.acc)) + block('Macro F1', pair(R.m2.model, ...R.m2.f1));
-  $('ns-a').textContent = R.m2.no_school.acc.toFixed(2); $('ns-f').textContent = R.m2.no_school.f1.toFixed(2);
+  
 })();
 hooks['s-res'] = () => document.querySelectorAll('#s-res .mb i').forEach((i, k) => { i.style.width = 0; setTimeout(() => i.style.width = i.dataset.w + '%', 500 + k * 70); });
 
@@ -881,7 +882,7 @@ function edToggle(on){
     ED.orig = {}; edList.forEach(e => ED.orig[e.dataset.ek] = e.innerHTML); ED.notes = {}; slides.forEach(s => ED.notes[s.id] = s.dataset.notes || ''); }
   q.contentEditable = on ? 'true' : 'false'; $('n-text').contentEditable = on ? 'true' : 'false';
   $('ed-go').hidden = on; $('ed-save').hidden = !on; $('ed-cancel').hidden = !on;
-  edStatus(on ? 'اضغطي على أي نص وعدّليه · ملاحظات المتحدث تحت · تنقلي بالأسهم' : '');
+  edStatus(on ? 'اضغطي على أي نص وعدّليه' : '');
 }
 $('n-text').addEventListener('input', () => { if (ED.on) slides[cur].dataset.notes = $('n-text').textContent; });
 async function edSave(){
