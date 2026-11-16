@@ -305,6 +305,17 @@ h2 em{font-style:normal;color:var(--red)}
 .at{font-family:var(--hd);font-size:66px;font-weight:800;color:#fff;line-height:1.45}
 .asrc{font-size:28px;color:var(--mute)}
 .frag{display:none}.frag.on{display:block;animation:rv .8s cubic-bezier(.2,.8,.3,1) both}
+/* edit mode */
+body.editing [data-ek]{outline:2px dashed rgba(24,192,114,.55);outline-offset:6px;border-radius:6px;cursor:text}
+body.editing [data-ek]:focus{outline:2px solid #18C072;background:rgba(24,192,114,.08)}
+body.editing .rv{opacity:1!important;animation:none!important}
+#edbar{position:fixed;left:50%;transform:translateX(-50%);top:14px;z-index:200;display:none;gap:10px;align-items:center;direction:rtl;font-family:var(--hd)}
+#edbar.show{display:flex}
+#edbar .btn{font-size:16px;padding:8px 16px;background:#13261d;border-color:#18C072;color:#EBECEF}
+#edbar .st{font-size:14px;color:#CACCD3;background:rgba(10,11,15,.92);padding:7px 12px;border-radius:8px}
+#edbar .st:empty{display:none}
+body.editing #notes{display:block}
+body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-radius:6px}
 /* presenter notes (outside the stage, not scaled) */
 #notes{position:fixed;left:0;right:0;bottom:0;max-height:42vh;overflow:auto;z-index:100;direction:rtl;background:rgba(10,11,15,.96);border-top:2px solid var(--red);
   padding:16px 28px 20px;font-family:var(--txt);display:none;box-shadow:0 -20px 50px rgba(0,0,0,.6)}
@@ -560,11 +571,30 @@ h2 em{font-style:normal;color:var(--red)}
 
 <div id="notes"><div class="hd"><b id="n-title"></b><span class="tm" id="n-time"></span><span id="n-idx"></span><span class="clk" id="n-clk">00:00</span></div><p id="n-text"></p><div class="nx" id="n-next"></div></div>
 
-<script>
+<div id="edbar"><button class="btn" id="ed-go">تعديل النصوص</button><button class="btn" id="ed-save" hidden>حفظ</button><button class="btn" id="ed-cancel" hidden>إلغاء</button><span class="st" id="ed-st"></span></div>
+
+<script type="application/json" id="sbq-edits">{}</script>
+<script id="sbq-cap">(function(){
+  var mine = function(n){ return n.nodeType !== 1 || n.tagName !== 'SCRIPT' || n.id === 'sbq-edits' || n.id === 'sbq-cap' || /a\/data\.js$/.test(n.getAttribute('src') || ''); };
+  var ser = function(n){ return n.nodeType === 1 ? n.outerHTML : n.nodeType === 3 ? n.textContent.replace(/&/g, '&amp;').replace(/</g, '&lt;') : ''; };
+  var b = document.body, inBody = !!b.querySelector('title'), head = '', pre = '';
+  if (inBody) head = [].filter.call(document.head.children, function(e){ return e.tagName !== 'SCRIPT'; }).map(function(e){ return e.outerHTML; }).join('');
+  else { head = '<meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">';
+         pre = [].filter.call(document.head.children, function(e){ return e.tagName !== 'META' || e.getAttribute('charset'); }).map(function(e){ return e.outerHTML; }).join('\n') + '\n'; }
+  window.__SBQ_HEAD = head; window.__SBQ_SRC = pre + [].filter.call(b.childNodes, mine).map(ser).join('');
+})();</script>
+<script id="sbq-main">
 // ---------------------------------------------------------------- settings
 const APP_URL = "";   // put the deployed Streamlit link here, e.g. "https://sabeqeenak.streamlit.app"
 const D = window.SBQ;
 const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
+// ---------------------------------------------------------------- saved text edits (applied before anything reads the slides)
+const EDITS = (() => { try { return JSON.parse($('sbq-edits').textContent || '{}'); } catch (e) { return {}; } })();
+const ED_SEL = '.slide h1,.slide h2,.slide h3,.kicker,.lead,.t2,.t3,.chip,.qsub,.qby,.at,.an,.asrc,.ty,.qa,.names,.ex,.src,.cap,.y,.hp,.tw p,.dl div,.out .q,.out .m,.st span,.f .s,.q b,.q div>span,.mod li,.lf li,.ios .t,.ios .k,.ios p,.ios-h,.gap,.alertcard p,.alertcard .h,.split p,.split .tr,.split .te,.trans,.res span,.link span,.snd span,#disc';
+const edAll = [...document.querySelectorAll(ED_SEL)].filter(e => (!e.id || e.id === 'disc') && !e.querySelector('[id]'));
+const edList = edAll.filter(e => !edAll.some(o => o !== e && o.contains(e)));
+edList.forEach((e, i) => { e.dataset.ek = 'e' + i; if (EDITS['e' + i] != null) e.innerHTML = EDITS['e' + i]; });
+document.querySelectorAll('.slide').forEach(s => { if (EDITS['n:' + s.id] != null) s.dataset.notes = EDITS['n:' + s.id]; });
 function el(t, a, p){ const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
 const ease = t => 1 - Math.pow(1 - t, 3);
 function countUp(node, to, dec = 0, ms = 1500, delay = 0, suffix = ''){
@@ -836,9 +866,49 @@ document.querySelectorAll('.mute').forEach(b => b.addEventListener('click', togg
 addEventListener('keydown', e => { if (e.key === 'm' || e.key === 'M') toggleSound(); });
 
 // ---------------------------------------------------------------- question typed out
-const QTXT = 'هل كنا نقدر نعرف من الليلة اللي قبلها؟'; let qT = 0;
+const QTXT = EDITS.qtxt || 'هل كنا نقدر نعرف من الليلة اللي قبلها؟'; let qT = 0;
 hooks['s-q'] = () => { clearInterval(qT); const t = $('qtype'); t.textContent = ''; let i = 0;
   setTimeout(() => { qT = setInterval(() => { t.textContent = QTXT.slice(0, ++i); if (i >= QTXT.length) clearInterval(qT); }, 45); }, 500); };
+
+// ---------------------------------------------------------------- edit mode: change any text, then save as a new version of this page
+const ED = {on: false, art: null, orig: {}, notes: {}};
+const edStatus = t => $('ed-st').textContent = t;
+function edToggle(on){
+  ED.on = on; document.body.classList.toggle('editing', on);
+  edList.forEach(e => e.contentEditable = on ? 'true' : 'false');
+  const q = $('qtype');
+  if (on){ clearInterval(qT); q.textContent = QTXT; q.dataset.ek = 'qtxt';
+    ED.orig = {}; edList.forEach(e => ED.orig[e.dataset.ek] = e.innerHTML); ED.notes = {}; slides.forEach(s => ED.notes[s.id] = s.dataset.notes || ''); }
+  q.contentEditable = on ? 'true' : 'false'; $('n-text').contentEditable = on ? 'true' : 'false';
+  $('ed-go').hidden = on; $('ed-save').hidden = !on; $('ed-cancel').hidden = !on;
+  edStatus(on ? 'اضغطي على أي نص وعدّليه · ملاحظات المتحدث تحت · تنقلي بالأسهم' : '');
+}
+$('n-text').addEventListener('input', () => { if (ED.on) slides[cur].dataset.notes = $('n-text').textContent; });
+async function edSave(){
+  const E = Object.assign({}, EDITS);
+  edList.forEach(e => { if (e.innerHTML !== ED.orig[e.dataset.ek]) E[e.dataset.ek] = e.innerHTML; });
+  const qt = $('qtype').textContent.trim(); if (qt && qt !== QTXT) E.qtxt = qt;
+  slides.forEach(s => { if ((s.dataset.notes || '') !== ED.notes[s.id]) E['n:' + s.id] = s.dataset.notes || ''; });
+  const json = JSON.stringify(E).replace(/</g, '\\u003c');
+  const src = window.__SBQ_SRC.replace(/(<script type="application\/json" id="sbq-edits">)[\s\S]*?(<\/script>)/, (m, a, b) => a + json + b);
+  const html = '<!doctype html><html><head>' + window.__SBQ_HEAD + '</head><body>' + src + '\n' + $('sbq-main').outerHTML + '</body></html>';
+  $('ed-save').disabled = true; edStatus('جاري الحفظ…');
+  try { await ED.art.publish(html); edStatus('انحفظ'); }
+  catch (err){ const c = err && err.code; $('ed-save').disabled = false;
+    edStatus(c === 'conflict' ? 'فيه نسخة أحدث، بتنفتح الحين' : (c === 'not_writer' || c === 'not_granted' || c === 'not_declared') ? 'هذي النسخة للعرض بس، ما تقدرين تحفظين منها' : 'ما انحفظ، جربي مرة ثانية'); }
+}
+$('ed-go').onclick = () => edToggle(true);
+$('ed-cancel').onclick = () => location.reload();
+$('ed-save').onclick = edSave;
+// while editing, typing never flips slides and clicks place the cursor instead of advancing
+addEventListener('keydown', e => { if (e.target.isContentEditable) e.stopImmediatePropagation(); }, true);
+addEventListener('click', e => { if (ED.on && e.target.closest('#deck')) e.stopPropagation(); }, true);
+(async () => {
+  if (!window.claude || !claude.use) return;
+  const art = await claude.use('artifact'); if (!art) return;
+  try { const u = await claude.use('user'); if (u && u.canEdit && (await u.canEdit()) === false) return; } catch (e) {}
+  ED.art = art; $('edbar').classList.add('show');
+})();
 
 // ---------------------------------------------------------------- start
 addEventListener('hashchange', () => { const k = parseInt(location.hash.slice(1), 10); if (!isNaN(k)) go(k - 1, false); });
