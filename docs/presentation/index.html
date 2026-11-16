@@ -219,7 +219,7 @@ h2 em{font-style:normal;color:var(--red)}
 .split p{margin:0;font-size:24px;color:#CACCD3}
 /* 10 results */
 .resg{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;margin-top:26px}
-.rc{padding:28px 36px;height:640px}
+.rc{padding:30px 36px;height:560px}
 .cost{margin-top:16px;font-size:20px;line-height:1.5;color:#FFE3A1;border-inline-start:3px solid var(--amber);padding-inline-start:14px}
 .rc h3{font-family:var(--hd);font-size:38px;font-weight:900;margin:0}
 .rc .cap{font-size:23px;color:#CACCD3;margin-top:8px}
@@ -245,6 +245,7 @@ h2 em{font-style:normal;color:var(--red)}
 .dl div{display:flex;gap:18px;align-items:center;font-size:27px;color:#DCDDE2}
 .dl div .n{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:rgba(24,192,114,.14);border:1px solid rgba(24,192,114,.45);color:#78EEB7;font-size:22px;font-weight:800}
 .app{margin-top:40px;padding:24px 28px;font-size:22px;color:var(--mute)}
+.app .ph{display:block;margin-top:10px;font-size:28px;color:#fff}
 .app a,.app code{display:block;margin-top:10px;font-family:var(--num);font-size:26px;color:#fff;direction:ltr;text-align:right;word-break:break-all;text-decoration:none}
 /* 12 limits */
 .lf{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:40px}
@@ -306,6 +307,14 @@ h2 em{font-style:normal;color:var(--red)}
 .at{font-family:var(--hd);font-size:66px;font-weight:800;color:#fff;line-height:1.45}
 .asrc{font-size:28px;color:var(--mute)}
 .frag{display:none}.frag.on{display:block;animation:rv .8s cubic-bezier(.2,.8,.3,1) both}
+.team1{position:absolute;bottom:150px;right:140px;font-size:26px;color:var(--dim)}
+.team1.t4{position:static;margin-top:40px}
+.dtab{margin-top:22px;padding:18px 22px;overflow:hidden}
+.dtab table{width:100%;border-collapse:collapse;direction:ltr;font-family:var(--num);font-size:16px}
+.dtab th{color:var(--mute);font-weight:700;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.dtab td{color:#fff;padding:7px 8px;white-space:nowrap}
+.dtab td.u{color:var(--mute);font-size:14px}.dtab td.al{color:#FF8FA3;font-weight:700}.dtab td.cl{color:#51CF66;font-weight:700}.dtab td.m{color:var(--dim)}
+.dsub{margin-top:24px;font-family:var(--hd);font-size:24px;font-weight:800;color:var(--red)}
 /* edit mode */
 body.editing [data-ek]{outline:2px dashed rgba(24,192,114,.55);outline-offset:6px;border-radius:6px;cursor:text}
 body.editing [data-ek]:focus{outline:2px solid #18C072;background:rgba(24,192,114,.08)}
@@ -388,6 +397,7 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
         <div class="rv" style="--d:120"><h1>سابقينك</h1></div>
         <div class="t2 rv" style="--d:240">متنبئ مخاطر الإنذار المبكر</div>
         <div class="t3 rv" style="--d:360">توقعات لكل منطقة في السعودية لبكرة: هل بيصير إنذار، وفي أي وقت، وكم ياخذ لين يزول الخطر.</div>
+        <div class="team1 t4 rv" style="--d:900">شادن · نوره · الجوهرة · سليمان &nbsp;|&nbsp; أكاديمية طويق</div>
       </div>
       <div class="pw rv" style="--d:200"><div class="rings" id="rg"><i></i><i></i><i></i></div>
         <div class="phone" id="ph"><div class="scr"><div class="notch"></div>
@@ -400,13 +410,17 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
 
 
   <!-- article 34 -->
-  <section class="slide" id="s-a34" data-bg="left" data-sec="" data-title="المادة 34" data-time="01:10–01:30"
-    data-notes="(اضغطوا مرة وحدة عشان يطلع نص المادة.) المادة 34 من النظام الأساسي للحكم: الدفاع عن العقيدة الإسلامية، والمجتمع، والوطن واجب على كل مواطن. ومن هنا جات فكرتنا: نساهم بالبيانات في استعداد الناس.">
-    <div class="aw">
-      <div class="apill rv" id="apill"><span class="an">المادة <b class="n">34</b></span>
-        <span class="at frag">الدفاع عن العقيدة الإسلامية، والمجتمع، والوطن واجب على كل مواطن</span></div>
-      <div class="asrc frag">النظام الأساسي للحكم</div>
-    </div>
+  <section class="slide" id="s-a34" data-bg="left" data-sec="" data-title="المادة 34" data-time="01:10–01:20"
+    data-notes="المادة 34 من النظام الأساسي للحكم.">
+    <div class="aw"><div class="apill rv"><span class="an">المادة <b class="n">34</b></span></div></div>
+    <div class="team1 rv" style="--d:900">شادن · نوره · الجوهرة · سليمان &nbsp;|&nbsp; أكاديمية طويق</div>
+  </section>
+
+  <!-- article 34 text -->
+  <section class="slide" id="s-a34t" data-bg="left" data-sec="" data-title="نص المادة" data-time="01:20–01:30"
+    data-notes="الدفاع عن العقيدة الإسلامية، والمجتمع، والوطن واجب على كل مواطن. ومن هنا جات فكرتنا: نساهم بالبيانات في استعداد الناس.">
+    <div class="aw"><div class="apill open rv"><span class="at">الدفاع عن العقيدة الاسلامية، والمجتمع، والوطن واجب على كل مواطن</span></div></div>
+    <div class="team1 rv" style="--d:900">شادن · نوره · الجوهرة · سليمان &nbsp;|&nbsp; أكاديمية طويق</div>
   </section>
 
   <!-- 4. problem -->
@@ -414,37 +428,27 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     data-notes="لما يوصل الإنذار، الرسالة تقول لك فيه خطر، بس ما تقول لك وش تتوقع بعدها. الناس تسأل ثلاث أسئلة: هل منطقتي بيجيها إنذار بكرة؟ لو صار، في أي وقت من اليوم؟ وكم ياخذ لين يزول الخطر؟ هدفنا نجاوب على هالأسئلة من البيانات نفسها.">
     <div class="kicker rv">المشكلة</div>
     <h2 class="rv" style="--d:80">لما يوصلك الإنذار، تجيك <em>ثلاث أسئلة</em></h2>
-    <div class="prob">
-      <div class="qs">
+    <div class="qs" style="margin-top:40px;max-width:1100px">
         <div class="card hud q rv" style="--d:250"><span class="n">01</span><div><b>هل بيجي منطقتي إنذار بكرة؟</b><span>عشان أستعد، وأقرر دوامي ومشاويري</span></div></div>
         <div class="card hud q rv" style="--d:450"><span class="n">02</span><div><b>لو صار، في أي وقت من اليوم؟</b><span>ليل، صباح، ظهر وعصر، أو مساء</span></div></div>
         <div class="card hud q rv" style="--d:650"><span class="n">03</span><div><b>كم ياخذ لين يزول الخطر؟</b><span>كم دقيقة أبقى في المكان الآمن</span></div></div>
-      </div>
-      <div>
-        <div class="card alertcard rv" style="--d:300"><div class="h"><i></i>إنذار مبكر</div><p>ابقَ في مكان آمن لين يُعلن زوال الخطر.</p><small>رسالة توضيحية · محاكاة</small></div>
-        <div class="card gap rv" style="--d:800">الرسالة تقول لك <b>فيه خطر</b>، بس ما تقول لك <b>وش تتوقع بعدها</b>. وهذا اللي نحاول نجاوب عليه من البيانات.</div>
-      </div>
     </div>
   </section>
 
   <!-- 5. data -->
   <section class="slide" id="s-data" data-bg="dim" data-sec="البيانات" data-title="البيانات" data-time="01:55–02:30"
-    data-notes="البيانات جمعناها بأنفسنا من حساب الدفاع المدني الرسمي: كل تغريدة إنذار وكل تغريدة زوال من 1 سبتمبر لين 10 نوفمبر. يعني 382 تغريدة: 190 إنذار و192 زوال في 8 مناطق. وربطنا كل إنذار بزواله عن طريق رقم Alert_ID، ومنها طلعت مدة كل إنذار. مثال: إنذار أبها يوم 8 سبتمبر الساعة 7:59، وزال 8:05، يعني 6 دقائق.">
+    data-notes="البيانات جمعناها بأنفسنا من حساب الدفاع المدني الرسمي: كل تغريدة إنذار وكل تغريدة زوال من 1 سبتمبر لين 10 نوفمبر. يعني 382 تغريدة: 191 إنذار و191 زوال في 8 مناطق. وتحت عينة من الملف: كل إنذار له رقم Alert_ID، ونفس الرقم في تغريدة الزوال، ومنها نحسب مدة كل إنذار. مثال: إنذار أبها يوم 8 سبتمبر الساعة 7:59، وزال 8:05، يعني 6 دقائق.">
     <div class="kicker rv">البيانات</div>
     <h2 class="rv" style="--d:80">جمعناها <em>بأنفسنا</em> من الحساب الرسمي</h2>
     <div class="stats">
       <div class="card st rv" style="--d:200"><b class="n cnt" data-k="tweets">0</b><span>تغريدة</span></div>
-      <div class="card st rv" style="--d:280"><b class="n cnt" data-k="alerts">0</b><span>إنذار</span></div>
-      <div class="card st rv" style="--d:360"><b class="n cnt" data-k="clears">0</b><span>تغريدة زوال خطر</span></div>
+      <div class="card st rv" style="--d:280"><b class="n cnt" data-v="191">0</b><span>إنذار</span></div>
+      <div class="card st rv" style="--d:360"><b class="n cnt" data-v="191">0</b><span>تغريدة زوال خطر</span></div>
       <div class="card st rv" style="--d:440"><b class="n cnt" data-k="n_regions">0</b><span>مناطق</span></div>
       <div class="card st rv" style="--d:520"><b class="n cnt" data-k="days">0</b><span>يوم · 1 سبتمبر إلى 10 نوفمبر 2026</span></div>
     </div>
-    <div class="pair">
-      <div class="card tw rv" style="--d:700"><div class="h"><b>إنذار</b><span class="n">AL-002</span></div><p>عسير · أبها · 8 سبتمبر</p><div class="t n">19:59</div></div>
-      <div class="link rv" style="--d:900"><span>نفس الرقم Alert_ID</span><i></i></div>
-      <div class="card tw cl rv" style="--d:1000"><div class="h"><b>زوال الخطر</b><span class="n">AL-002</span></div><p>عسير · أبها · 8 سبتمبر</p><div class="t n">20:05</div></div>
-      <div class="card hud res rv" style="--d:1300"><b class="n">6</b><span>دقائق = مدة الإنذار</span></div>
-    </div>
+    <div class="dsub rv" style="--d:650">عينة من البيانات</div>
+    <div class="card dtab rv" style="--d:750"><table><tr><th>Tweet_ID</th><th>Tweet_URL</th><th>Tweet_Type</th><th>Alert_ID</th><th>Day</th><th>Date</th><th>Time</th><th>Region</th><th>City</th><th>Source_Account</th></tr><tr><td>2097369128520585503</td><td class="u">https://x.com/SaudiDCD/status/2097369128520585503</td><td class="al">Alert</td><td class="m">AL-002</td><td>Tuesday</td><td>9/8/2026</td><td>19:59</td><td>Asir</td><td>Abha</td><td class="m">@SaudiDCD</td></tr><tr><td>2097370721210999166</td><td class="u">https://x.com/SaudiDCD/status/2097370721210999166</td><td class="cl">Clear</td><td class="m">AL-002</td><td>Tuesday</td><td>9/8/2026</td><td>20:05</td><td>Asir</td><td>Abha</td><td class="m">@SaudiDCD</td></tr><tr><td>2097571780315455501</td><td class="u">https://x.com/SaudiDCD/status/2097571780315455501</td><td class="al">Alert</td><td class="m">AL-004</td><td>Wednesday</td><td>9/9/2026</td><td>9:24</td><td>Asir</td><td>Khamis Mushait</td><td class="m">@SaudiDCD</td></tr><tr><td>2097572600134107446</td><td class="u">https://x.com/SaudiDCD/status/2097572600134107446</td><td class="cl">Clear</td><td class="m">AL-004</td><td>Wednesday</td><td>9/9/2026</td><td>9:27</td><td>Asir</td><td>Khamis Mushait</td><td class="m">@SaudiDCD</td></tr><tr><td>2097692652246356139</td><td class="u">https://x.com/SaudiDCD/status/2097692652246356139</td><td class="al">Alert</td><td class="m">AL-005</td><td>Wednesday</td><td>9/9/2026</td><td>17:24</td><td>Asir</td><td>Khamis Mushait</td><td class="m">@SaudiDCD</td></tr></table></div>
     <div class="src rv" style="--d:1500">المصدر: حساب الدفاع المدني على X (@SaudiDCD) · كل تغريدة محفوظة برابطها في ملف البيانات</div>
   </section>
 
@@ -461,20 +465,6 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     </div>
   </section>
 
-  <!-- 7. replay -->
-  <section class="slide" id="s-replay" data-bg="off" data-sec="وش اكتشفنا" data-title="إعادة تشغيل الإنذارات" data-time="03:15–03:40"
-    data-notes="هنا كل الإنذارات تتشغل بترتيبها الزمني على الخريطة: كل نبضة إنذار حقيقي. لاحظوا كيف الجنوب، عسير ونجران وجازان، هو الأكثر، وكيف تجي الإنذارات على شكل موجات. تقدرون تضغطون على أي يوم تحت وتنتقلون له.">
-    <div class="kicker rv">إعادة تشغيل</div>
-    <div class="rp">
-      <div class="side rv" style="--d:150">
-        <div><div class="date" id="rp-d"></div><div class="sub"><span id="rp-day"></span> · <span class="n" id="rp-t"></span></div></div>
-        <div class="card cnt"><b class="n" id="rp-c">0</b><span>إنذار لين الحين</span></div>
-        <div class="race" id="rp-race"></div>
-        <div class="ctl"><button class="btn" id="rp-pp">إيقاف</button><button class="btn" id="rp-rs">من البداية</button></div>
-      </div>
-      <div class="mapbox rv" style="--d:250"><svg id="rp-svg"></svg><div class="hist" id="rp-hist"><div class="ph" id="rp-ph"></div></div></div>
-    </div>
-  </section>
 
   <!-- 8. solution -->
   <section class="slide" id="s-sol" data-bg="dim" data-sec="الحل" data-title="الحل" data-time="03:40–04:10"
@@ -492,8 +482,8 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
   <!-- 9. models -->
   <section class="slide" id="s-mod" data-bg="dim" data-sec="الموديلات والنتائج" data-title="الموديلات" data-time="04:10–04:50"
     data-notes="بنينا جدولين: الأول صف لكل منطقة في كل يوم، والسؤال: فيه إنذار بكرة؟ والثاني صف لكل إنذار، والسؤال: في أي فترة صار؟ كل الميزات محسوبة من الماضي بس، ما فيه أي معلومة من المستقبل. وقسمنا البيانات حسب الوقت: دربنا على الأسابيع الأولى واختبرنا على آخر ثلاث أسابيع ما شافها الموديل. قارنا ثلاث موديلات مع قاعدة بسيطة، واخترنا الأفضل بالـ cross-validation.">
-    <div class="kicker rv">الموديلات</div>
-    <h2 class="rv" style="--d:80">موديلين، وكل ميزة من <em>الماضي</em> بس</h2>
+    <div class="kicker rv">المودلز</div>
+    <h2 class="rv" style="--d:80">مودلين، وكل عامود من <em>الماضي</em> بس</h2>
     <div class="mods">
       <div class="card hud mod rv" style="--d:250"><div class="tp"><h3>خطر الغد</h3><span class="alg">Random Forest</span></div>
         <div class="y">صف لكل منطقة في كل يوم · السؤال: هل فيه إنذار بكرة؟ (نعم / لا)</div>
@@ -512,9 +502,9 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
   <section class="slide" id="s-res" data-bg="dim" data-sec="الموديلات والنتائج" data-title="النتائج" data-time="04:50–05:35"
     data-notes="النتائج على أسابيع الاختبار: موديل خطر الغد يلقط 78% من أيام الهجمات، والقاعدة البسيطة (صار اليوم يعني بيصير بكرة) تلقط 37% بس، يعني تقريباً الضعف. الثمن إن فيه تنبيهات زايدة: الـ precision 33%، واخترنا كذا لأن تفويت يوم فيه خطر أسوأ من تنبيه زايد. موديل الوقت دقته 41% مقابل 22% للقاعدة، وفيه أربع فترات يعني التخمين العشوائي 25%. وبكل شفافية: ميزة الدراسة الحضورية اصطناعية، وافق عليها المدرب، وبدونها الدقة تنزل لـ 26%.">
     <div class="kicker rv">النتائج</div>
-    <h2 class="rv" style="--d:80">على أسابيع الاختبار، مقارنة بـ <em>قاعدة بسيطة</em></h2>
+    <h2 class="rv" style="--d:80">على أسابيع الاختبار، مقارنة <em>بقاعدة بسيطة</em></h2>
     <div class="resg">
-      <div class="card hud rc rv" style="--d:250"><h3>خطر الغد</h3><div class="cap">يلقط <b class="n">78%</b> من أيام الهجمات، تقريباً ضعف القاعدة البسيطة</div><div id="r1"></div><div class="cost">الثمن: تنبيهات زايدة. نفضّل نستعد ليوم وما يصير شي، على إننا نفوّت يوم فيه خطر</div></div>
+      <div class="card hud rc rv" style="--d:250"><h3>خطر الغد</h3><div class="cap">يلقط <b class="n">78%</b> من أيام الهجمات، تقريباً ضعف القاعدة البسيطة</div><div id="r1"></div></div>
       <div class="card hud rc rv" style="--d:400"><h3>الوقت الأرجح</h3><div class="cap">دقته <b class="n">41%</b> مقابل <span class="n">22%</span> للقاعدة البسيطة</div><div id="r2"></div>
         <div class="trans">ميزة <b>الدراسة الحضورية</b> اصطناعية، بموافقة المدرب. بدونها: Accuracy <b class="n">0.26</b> و Macro F1 <b class="n">0.22</b></div></div>
     </div>
@@ -527,7 +517,7 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     <h2 class="rv" style="--d:80">وين نوقف، ووين نروح بعدها</h2>
     <div class="lf">
       <div class="card hud rv" style="--d:250"><h3>القيود</h3><ul>
-        <li>البيانات 71 يوم بس (190 إنذار)</li><li>خطر الغد يعطي تنبيهات زايدة كثيرة (Precision 33%)</li>
+        <li>البيانات 71 يوم بس (191 إنذار)</li><li>خطر الغد يعطي تنبيهات زايدة كثيرة (Precision 33%)</li>
         <li>أنماط الهجمات تتغير مع الوقت</li><li>ميزة الدراسة الحضورية اصطناعية، وتحتاج بيانات حقيقية</li></ul></div>
       <div class="card hud fut rv" style="--d:400"><h3>الخطوات الجاية</h3><ul>
         <li>جمع التغريدات تلقائياً بدل الجمع اليدوي</li><li>إعادة تدريب الموديلات بشكل دوري</li>
@@ -563,8 +553,8 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     data-notes="اختموا: هذا سابقينك. شكراً لكم، ونسعد بأسئلتكم.">
     <div class="c">
       <div class="rv"><h1>سابقينك</h1></div>
-      <div class="ty rv" style="--d:200">شكراً لكم</div>
-      <div class="qa rv" style="--d:350">نسعد بأسئلتكم</div>
+      <div class="ty rv" style="--d:200">شكرًا لكم</div>
+      <div class="qa rv" style="--d:350">أي اسئلة؟</div>
       <div class="names rv" style="--d:500"><b>شادن</b>·<b>نوره</b>·<b>الجوهرة</b>·<b>سليمان</b></div>
     </div>
   </section>
@@ -591,7 +581,7 @@ const D = window.SBQ;
 const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
 // ---------------------------------------------------------------- saved text edits (applied before anything reads the slides)
 const EDITS = (() => { try { return JSON.parse($('sbq-edits').textContent || '{}'); } catch (e) { return {}; } })();
-const ED_SEL = '.slide h1,.slide h2,.slide h3,.kicker,.lead,.t2,.t3,.chip,.qsub,.qby,.at,.an,.asrc,.ty,.qa,.names,.ex,.src,.cap,.y,.hp,.tw p,.dl div,.out .q,.out .m,.st span,.f .s,.q b,.q div>span,.mod li,.lf li,.ios .t,.ios .k,.ios p,.ios-h,.gap,.alertcard p,.alertcard .h,.split p,.split .tr,.split .te,.trans,.cost,.res span,.link span,.snd span,#disc';
+const ED_SEL = '.slide h1,.slide h2,.slide h3,.kicker,.lead,.t2,.t3,.chip,.qsub,.qby,.at,.an,.asrc,.ty,.qa,.names,.ex,.src,.cap,.y,.hp,.tw p,.dl div,.out .q,.out .m,.st span,.f .s,.q b,.q div>span,.mod li,.lf li,.ios .t,.ios .k,.ios p,.ios-h,.gap,.alertcard p,.alertcard .h,.split p,.split .tr,.split .te,.trans,.cost,.team1,.dsub,.app .ph,.res span,.link span,.snd span,#disc';
 const edAll = [...document.querySelectorAll(ED_SEL)].filter(e => (!e.id || e.id === 'disc') && !e.querySelector('[id]'));
 const edList = edAll.filter(e => !edAll.some(o => o !== e && o.contains(e)));
 edList.forEach((e, i) => { e.dataset.ek = 'e' + i; if (EDITS['e' + i] != null) e.innerHTML = EDITS['e' + i]; });
@@ -678,9 +668,9 @@ function go(i, push = true){
   renderNotes();
 }
 function next(){ const f = slides[cur] && slides[cur].querySelector('.frag:not(.on)');
-  if (f){ slides[cur].querySelectorAll('.frag:not(.on)').forEach(x => x.classList.add('on')); const ap = $('apill'); ap && ap.classList.add('open'); return; }
+  if (f){ slides[cur].querySelectorAll('.frag:not(.on)').forEach(x => x.classList.add('on')); return; }
   go(cur + 1); }
-hooks['s-a34'] = () => { document.querySelectorAll('#s-a34 .frag').forEach(x => x.classList.remove('on')); $('apill').classList.remove('open'); };
+
 function startTimer(){ if (!window._t0) window._t0 = Date.now(); }
 addEventListener('keydown', e => {
   if (['ArrowLeft', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)){ e.preventDefault(); startTimer(); next(); }
@@ -730,7 +720,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 
 // ---------------------------------------------------------------- 5. data counters
-hooks['s-data'] = () => document.querySelectorAll('#s-data .cnt').forEach((n, i) => countUp(n, D[n.dataset.k], 0, 1400, 300 + i * 90));
+hooks['s-data'] = () => document.querySelectorAll('#s-data .cnt').forEach((n, i) => countUp(n, n.dataset.v ? +n.dataset.v : D[n.dataset.k], 0, 1400, 300 + i * 90));
 
 // ---------------------------------------------------------------- 6. findings
 (function(){
@@ -788,7 +778,7 @@ function rpLoop(t){ const dt = Math.min(.1, (t - RP.last) / 1000); RP.last = t;
     while (RP.idx < D.events.length && D.events[RP.idx][0] <= RP.cur){ const e = D.events[RP.idx]; RP.counts[e[1]]++; rpPulse(e[1]); hit = e[1]; RP.idx++; }
     if (hit >= 0) rpRace(hit); if (RP.cur >= RP_END){ RP.cur = RP_END; RP.run = false; $('rp-pp').textContent = 'تشغيل'; } rpHud(); }
   RP.raf = requestAnimationFrame(rpLoop); }
-hooks['s-replay'] = () => { if (!RP.built) rpBuild(); rpSeek(0); RP.run = true; $('rp-pp').textContent = 'إيقاف'; RP.last = performance.now(); cancelAnimationFrame(RP.raf); setTimeout(() => { RP.last = performance.now(); RP.raf = requestAnimationFrame(rpLoop); }, 900); };
+hooks['s-replay-off'] = () => { if (!RP.built) rpBuild(); rpSeek(0); RP.run = true; $('rp-pp').textContent = 'إيقاف'; RP.last = performance.now(); cancelAnimationFrame(RP.raf); setTimeout(() => { RP.last = performance.now(); RP.raf = requestAnimationFrame(rpLoop); }, 900); };
 hooks['s-replay:leave'] = () => { RP.run = false; cancelAnimationFrame(RP.raf); };
 
 // ---------------------------------------------------------------- 8. three instruments (same style as the app)
@@ -836,7 +826,7 @@ hooks['s-sol'] = () => solInit.forEach(f => f());
   const block = (title, rows) => `<div class="metric"><div class="lb"><span>${title}</span></div><div class="mb">${rows}</div></div>`;
   const pair = (name, us, base) => `<div class="us"><span>${name}</span><span class="tr"><i data-w="${us * 100}"></i></span><span class="v">${us.toFixed(2)}</span></div>
      <div class="bl"><span>القاعدة البسيطة</span><span class="tr"><i data-w="${base * 100}"></i></span><span class="v">${base.toFixed(2)}</span></div>`;
-  $('r1').innerHTML = block('Recall: كم يوم هجوم لقطنا', pair(R.m1.model, ...R.m1.recall)) + block('F1', pair(R.m1.model, ...R.m1.f1)) + block('ROC-AUC', pair(R.m1.model, ...R.m1.auc)) + block('Precision: لما يقول فيه خطر، كم مرة يصدق', pair(R.m1.model, ...R.m1.precision));
+  $('r1').innerHTML = block('Recall: كم يوم هجوم لقطنا', pair(R.m1.model, ...R.m1.recall)) + block('F1', pair(R.m1.model, ...R.m1.f1)) + block('ROC-AUC', pair(R.m1.model, ...R.m1.auc));
   $('r2').innerHTML = block('Accuracy', pair(R.m2.model, ...R.m2.acc)) + block('Macro F1', pair(R.m2.model, ...R.m2.f1));
   
 })();
@@ -851,7 +841,7 @@ hooks['s-res'] = () => document.querySelectorAll('#s-res .mb i').forEach((i, k) 
   V.forEach(([f, n], i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = n; b.onclick = () => pick(i); $('vt').appendChild(b); });
   pick(1);
   $('app').innerHTML = APP_URL ? `رابط التطبيق<a href="${APP_URL}" target="_blank" rel="noopener">${APP_URL.replace(/^https?:\/\//, '')}</a>`
-                               : `تشغيل التطبيق محلياً<code>streamlit run app_v2.py</code>`;
+                               : `رابط التطبيق<b class="ph">حطوا رابط التطبيق هنا</b>`;
 })();
 hooks['s-demo'] = () => $('vv').play().catch(() => {});
 hooks['s-demo:leave'] = () => $('vv').pause();
