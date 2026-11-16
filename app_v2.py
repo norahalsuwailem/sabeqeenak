@@ -161,8 +161,8 @@ def fmt_day(d, weekday=False):
 html(f"""<style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
 html, body, .stMarkdown, button, input, label, p, span, div {{font-family:'Inter','IBM Plex Sans Arabic',system-ui,sans-serif;}}
-.stApp{{background:radial-gradient(1100px 600px at 85% -10%, rgba(19,156,92,.10), transparent 60%),
-  radial-gradient(900px 600px at -10% 20%, rgba(33,176,109,.10), transparent 60%), #0C0D11 !important; color:#EBECEF;}}
+.stApp{{background:radial-gradient(1100px 600px at 85% -10%, rgba(255,194,51,.10), transparent 60%),
+  radial-gradient(900px 600px at -10% 20%, rgba(255,194,51,.10), transparent 60%), #0C0D11 !important; color:#EBECEF;}}
 header[data-testid="stHeader"]{{background:transparent;}}
 .block-container{{padding-top:3rem !important; max-width:1260px;}}
 iframe{{border-radius:24px;}}
@@ -173,12 +173,12 @@ iframe{{border-radius:24px;}}
 [role="listbox"], [role="listbox"] [role="option"]{{background:#1C1D25 !important; color:#EBECEF !important;}}
 [role="listbox"] [role="option"]:hover, [role="listbox"] [role="option"][data-focused]{{background:#292B35 !important;}}
 [data-testid="stButtonGroup"] button{{background:#1C1D25 !important; color:#EBECEF !important; border-color:#31333D !important;}}
-[data-testid="stButtonGroup"] button[kind$="Active"], [data-testid="stButtonGroup"] button[aria-checked="true"]{{background:rgba(19,156,92,.18) !important; color:#69EDAF !important; border-color:#139C5C !important;}}
+[data-testid="stButtonGroup"] button[kind$="Active"], [data-testid="stButtonGroup"] button[aria-checked="true"]{{background:rgba(255,194,51,.18) !important; color:#FFE08A !important; border-color:#E6A817 !important;}}
 .stTabs [data-baseweb="tab-list"]{{gap:6px; border-bottom:1px solid #2A2D38;}}
 .stTabs [role="tab"]{{padding:10px 16px; border-radius:12px 12px 0 0;}}
 .stTabs [role="tab"] p{{color:#9FA1AC !important; font-size:1.02rem; font-weight:600;}}
-.stTabs [role="tab"][aria-selected="true"] p{{color:#69EDAF !important;}}
-.stTabs [data-baseweb="tab-highlight"]{{background:#139C5C !important;}}
+.stTabs [role="tab"][aria-selected="true"] p{{color:#FFE08A !important;}}
+.stTabs [data-baseweb="tab-highlight"]{{background:#E6A817 !important;}}
 section[data-testid="stSidebar"]{{background:#121319 !important; border-inline-end:1px solid #2A2D38;}}
 section[data-testid="stSidebar"] *{{color:#EBECEF;}}
 [data-testid="stFileUploaderDropzone"]{{background:#17181F !important; border:1px dashed #383B47 !important;}}
@@ -187,18 +187,18 @@ section[data-testid="stSidebar"] *{{color:#EBECEF;}}
 div[data-testid="stVerticalBlockBorderWrapper"]{{background:linear-gradient(165deg,#1D1F28,#171920) !important; border-color:#2F313C !important; border-radius:22px !important;}}
 .g-line{{direction:{DIR}; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin:6px 0 12px;}}
 .g-out{{font-size:1.02rem; color:#CACCD3;}} .g-out b{{color:#fff;}}
-.g-warn{{display:inline-flex; gap:8px; align-items:center; font-size:.86rem; color:#8CF1C2; background:rgba(24,196,116,.08);
-  border:1px solid rgba(24,196,116,.3); border-radius:999px; padding:6px 14px;}}
-.g-dot{{width:7px; height:7px; border-radius:50%; background:#18C072; box-shadow:0 0 8px #18C072; flex:none;}}
+.g-warn{{display:inline-flex; gap:8px; align-items:center; font-size:.86rem; color:#FFE08A; background:rgba(255,194,51,.08);
+  border:1px solid rgba(255,194,51,.3); border-radius:999px; padding:6px 14px;}}
+.g-dot{{width:7px; height:7px; border-radius:50%; background:#FFC233; box-shadow:0 0 8px #FFC233; flex:none;}}
 .g-info{{direction:{DIR}; font-size:.9rem; color:#C2C8E2; background:rgba(132,142,192,.08); border:1px solid rgba(132,142,192,.3);
   border-radius:14px; padding:8px 14px; margin-top:6px;}}
 .g-card{{direction:{DIR}; background:linear-gradient(165deg,#1D1F28,#171920); border:1px solid #2F313C; border-radius:22px; padding:22px 26px; color:#CACCD3; line-height:1.75;}}
-.g-card h4{{color:#fff; margin:0 0 6px; font-size:1.05rem;}} .g-card b{{color:#69EDAF;}}
+.g-card h4{{color:#fff; margin:0 0 6px; font-size:1.05rem;}} .g-card b{{color:#FFE08A;}}
 .g-card .sec{{padding:12px 0; border-bottom:1px solid #2A2D38;}} .g-card .sec:last-child{{border-bottom:none;}}
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap');
 .stApp:before{{content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
   background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 4px),
-             radial-gradient(1200px 700px at 50% -20%, rgba(24,192,114,.10), transparent 60%);}}
+             radial-gradient(1200px 700px at 50% -20%, rgba(255,194,51,.10), transparent 60%);}}
 /* tabs -> centered pill navigation */
 .stTabs [data-baseweb="tab-list"], .stTabs [role="tablist"]{{gap:4px; border:1px solid #2A2D38 !important; background:#121319; border-radius:14px; padding:6px;
   width:fit-content; margin:8px auto 18px; box-shadow:0 10px 30px rgba(0,0,0,.35);}}
@@ -206,12 +206,12 @@ div[data-testid="stVerticalBlockBorderWrapper"]{{background:linear-gradient(165d
 .stTabs [data-baseweb="tab-border"], .stTabs [data-baseweb="tab-highlight"]{{display:none !important;}}
 .stTabs [role="tab"]{{padding:8px 18px !important; border-radius:10px !important; transition:all .25s;}}
 .stTabs [role="tab"] p{{font-family:'Cairo','IBM Plex Sans Arabic',sans-serif !important; font-size:1.02rem !important; font-weight:700 !important;}}
-.stTabs [role="tab"][aria-selected="true"]{{background:linear-gradient(180deg,#18C072,#118C53); box-shadow:0 6px 22px rgba(24,192,114,.35);}}
-.stTabs [role="tab"][aria-selected="true"] p{{color:#fff !important;}}
+.stTabs [role="tab"][aria-selected="true"]{{background:linear-gradient(180deg,#FFC233,#D99A0E); box-shadow:0 6px 22px rgba(255,194,51,.35);}}
+.stTabs [role="tab"][aria-selected="true"] p{{color:#1A1405 !important;}}
 .stTabs [role="tab"]:hover p{{color:#fff !important;}}
 /* region pills */
 [data-testid="stButtonGroup"] button{{border-radius:10px !important; padding:6px 14px !important; font-weight:600 !important;}}
-[data-testid="stWidgetLabel"] p{{font-family:'Cairo','IBM Plex Sans Arabic',sans-serif !important; font-size:1rem !important; color:#78EEB7 !important; letter-spacing:.2px;}}
+[data-testid="stWidgetLabel"] p{{font-family:'Cairo','IBM Plex Sans Arabic',sans-serif !important; font-size:1rem !important; color:#FFE08A !important; letter-spacing:.2px;}}
 /* threat banner */
 .threat{{direction:{DIR}; position:relative; display:grid; grid-template-columns:auto 1fr auto; gap:26px; align-items:center;
   margin:10px 0 18px; padding:16px 24px; border-radius:14px; overflow:hidden;
