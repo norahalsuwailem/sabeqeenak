@@ -218,12 +218,13 @@ h2 em{font-style:normal;color:var(--red)}
 .split .te{flex:21;display:grid;place-items:center;background:linear-gradient(90deg,var(--red2),#5AEBA7);color:#fff}
 .split p{margin:0;font-size:24px;color:#CACCD3}
 /* 10 results */
-.resg{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;margin-top:34px}
-.rc{padding:30px 36px;height:520px}
+.resg{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;margin-top:26px}
+.rc{padding:28px 36px;height:640px}
+.cost{margin-top:16px;font-size:20px;line-height:1.5;color:#FFE3A1;border-inline-start:3px solid var(--amber);padding-inline-start:14px}
 .rc h3{font-family:var(--hd);font-size:38px;font-weight:900;margin:0}
 .rc .cap{font-size:23px;color:#CACCD3;margin-top:8px}
 .rc .cap b{color:#78EEB7}
-.metric{margin-top:26px}
+.metric{margin-top:18px}
 .metric .lb{display:flex;justify-content:space-between;font-size:22px;color:var(--mute);margin-bottom:8px}
 .metric .lb b{color:#fff;font-family:var(--num)}
 .mb{display:grid;gap:7px}
@@ -513,7 +514,7 @@ body.editing #n-text{outline:2px dashed rgba(24,192,114,.55);padding:8px;border-
     <div class="kicker rv">النتائج</div>
     <h2 class="rv" style="--d:80">على أسابيع الاختبار، مقارنة بـ <em>قاعدة بسيطة</em></h2>
     <div class="resg">
-      <div class="card hud rc rv" style="--d:250"><h3>خطر الغد</h3><div class="cap">يلقط <b class="n">78%</b> من أيام الهجمات، تقريباً ضعف القاعدة البسيطة</div><div id="r1"></div></div>
+      <div class="card hud rc rv" style="--d:250"><h3>خطر الغد</h3><div class="cap">يلقط <b class="n">78%</b> من أيام الهجمات، تقريباً ضعف القاعدة البسيطة</div><div id="r1"></div><div class="cost">الثمن: تنبيهات زايدة. نفضّل نستعد ليوم وما يصير شي، على إننا نفوّت يوم فيه خطر</div></div>
       <div class="card hud rc rv" style="--d:400"><h3>الوقت الأرجح</h3><div class="cap">دقته <b class="n">41%</b> مقابل <span class="n">22%</span> للقاعدة البسيطة</div><div id="r2"></div>
         <div class="trans">ميزة <b>الدراسة الحضورية</b> اصطناعية، بموافقة المدرب. بدونها: Accuracy <b class="n">0.26</b> و Macro F1 <b class="n">0.22</b></div></div>
     </div>
@@ -590,7 +591,7 @@ const D = window.SBQ;
 const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
 // ---------------------------------------------------------------- saved text edits (applied before anything reads the slides)
 const EDITS = (() => { try { return JSON.parse($('sbq-edits').textContent || '{}'); } catch (e) { return {}; } })();
-const ED_SEL = '.slide h1,.slide h2,.slide h3,.kicker,.lead,.t2,.t3,.chip,.qsub,.qby,.at,.an,.asrc,.ty,.qa,.names,.ex,.src,.cap,.y,.hp,.tw p,.dl div,.out .q,.out .m,.st span,.f .s,.q b,.q div>span,.mod li,.lf li,.ios .t,.ios .k,.ios p,.ios-h,.gap,.alertcard p,.alertcard .h,.split p,.split .tr,.split .te,.trans,.res span,.link span,.snd span,#disc';
+const ED_SEL = '.slide h1,.slide h2,.slide h3,.kicker,.lead,.t2,.t3,.chip,.qsub,.qby,.at,.an,.asrc,.ty,.qa,.names,.ex,.src,.cap,.y,.hp,.tw p,.dl div,.out .q,.out .m,.st span,.f .s,.q b,.q div>span,.mod li,.lf li,.ios .t,.ios .k,.ios p,.ios-h,.gap,.alertcard p,.alertcard .h,.split p,.split .tr,.split .te,.trans,.cost,.res span,.link span,.snd span,#disc';
 const edAll = [...document.querySelectorAll(ED_SEL)].filter(e => (!e.id || e.id === 'disc') && !e.querySelector('[id]'));
 const edList = edAll.filter(e => !edAll.some(o => o !== e && o.contains(e)));
 edList.forEach((e, i) => { e.dataset.ek = 'e' + i; if (EDITS['e' + i] != null) e.innerHTML = EDITS['e' + i]; });
@@ -835,7 +836,7 @@ hooks['s-sol'] = () => solInit.forEach(f => f());
   const block = (title, rows) => `<div class="metric"><div class="lb"><span>${title}</span></div><div class="mb">${rows}</div></div>`;
   const pair = (name, us, base) => `<div class="us"><span>${name}</span><span class="tr"><i data-w="${us * 100}"></i></span><span class="v">${us.toFixed(2)}</span></div>
      <div class="bl"><span>القاعدة البسيطة</span><span class="tr"><i data-w="${base * 100}"></i></span><span class="v">${base.toFixed(2)}</span></div>`;
-  $('r1').innerHTML = block('Recall: كم يوم هجوم لقطنا', pair(R.m1.model, ...R.m1.recall)) + block('F1', pair(R.m1.model, ...R.m1.f1)) + block('ROC-AUC', pair(R.m1.model, ...R.m1.auc));
+  $('r1').innerHTML = block('Recall: كم يوم هجوم لقطنا', pair(R.m1.model, ...R.m1.recall)) + block('F1', pair(R.m1.model, ...R.m1.f1)) + block('ROC-AUC', pair(R.m1.model, ...R.m1.auc)) + block('Precision: لما يقول فيه خطر، كم مرة يصدق', pair(R.m1.model, ...R.m1.precision));
   $('r2').innerHTML = block('Accuracy', pair(R.m2.model, ...R.m2.acc)) + block('Macro F1', pair(R.m2.model, ...R.m2.f1));
   
 })();
