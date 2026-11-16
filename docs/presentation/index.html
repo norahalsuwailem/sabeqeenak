@@ -537,7 +537,6 @@ body.editing #n-text{outline:2px dashed rgba(255,194,51,.55);padding:8px;border-
           <div class="rv" style="--d:450"><span class="n">3</span>كل المناطق على الخريطة</div>
           <div class="rv" style="--d:550"><span class="n">4</span>إعادة تشغيل كل الإنذارات</div>
         </div>
-        <div class="card app rv" style="--d:700" id="app"></div>
       </div>
       <div class="card hud vid rv" style="--d:300">
         <div class="tabs" id="vt"></div>
@@ -839,8 +838,6 @@ hooks['s-res'] = () => document.querySelectorAll('#s-res .mb i').forEach((i, k) 
     vv.poster = `a/${V[i][0]}.webp`; vv.src = `a/${V[i][0]}.webm`; if (slides[cur] && slides[cur].id === 's-demo') vv.play().catch(() => {}); };
   V.forEach(([f, n], i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = n; b.onclick = () => pick(i); $('vt').appendChild(b); });
   pick(1);
-  $('app').innerHTML = APP_URL ? `رابط التطبيق<a href="${APP_URL}" target="_blank" rel="noopener">${APP_URL.replace(/^https?:\/\//, '')}</a>`
-                               : `رابط التطبيق<b class="ph">حطوا رابط التطبيق هنا</b>`;
 })();
 hooks['s-demo'] = () => $('vv').play().catch(() => {});
 hooks['s-demo:leave'] = () => $('vv').pause();
